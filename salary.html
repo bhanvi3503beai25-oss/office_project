@@ -1,0 +1,3865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FedEx Admin - Salary</title>
+
+<link rel="stylesheet" href="STYLE.CSS">
+
+<style>
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+:root{
+    --primary:#1976ff;
+    --primary-hover:#0d63df;
+
+    --page-bg:#0b1322;
+    --card-bg:#17243a;
+    --card-bg-2:#1d2c45;
+
+    --input-bg:#101a2b;
+
+    --text:#ffffff;
+    --muted:#aebbd0;
+
+    --border:rgba(255,255,255,.12);
+
+    --success:#22c55e;
+    --warning:#f59e0b;
+    --danger:#ef4444;
+
+    --shadow:0 15px 40px rgba(0,0,0,.20);
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:var(--page-bg);
+    color:var(--text);
+    transition:
+        background .25s ease,
+        color .25s ease;
+}
+
+
+/* =========================================================
+   LIGHT MODE
+========================================================= */
+
+body.light-mode{
+
+    --page-bg:#f3f6fb;
+    --card-bg:#ffffff;
+    --card-bg-2:#f8fafc;
+
+    --input-bg:#f4f7fb;
+
+    --text:#172033;
+    --muted:#64748b;
+
+    --border:rgba(15,23,42,.12);
+
+    --shadow:0 15px 35px rgba(15,23,42,.10);
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+    min-height:100vh;
+}
+
+.page-header{
+    margin-bottom:24px;
+}
+
+.page-header h1{
+    margin:0 0 7px;
+    font-size:36px;
+    line-height:1.15;
+}
+
+.subtitle{
+    margin:0;
+    color:var(--muted);
+    font-size:14px;
+}
+
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.cards{
+    display:grid;
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+
+    gap:18px;
+
+    margin-bottom:22px;
+}
+
+.stat-card{
+    background:
+        linear-gradient(
+            145deg,
+            var(--card-bg),
+            var(--card-bg-2)
+        );
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    padding:20px;
+
+    box-shadow:var(--shadow);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+.stat-card:hover{
+    transform:translateY(-4px);
+}
+
+.stat-card p{
+    margin:0 0 8px;
+
+    color:var(--muted);
+
+    font-size:13px;
+}
+
+.stat-card h2{
+    margin:0;
+
+    color:var(--text);
+
+    font-size:27px;
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+.panel{
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--card-bg),
+            var(--card-bg-2)
+        );
+
+    border:1px solid var(--border);
+
+    border-radius:18px;
+
+    padding:20px;
+
+    margin-bottom:22px;
+
+    box-shadow:var(--shadow);
+
+    /* IMPORTANT:
+       no white background anywhere */
+}
+
+
+/* =========================================================
+   SEARCH ROW
+========================================================= */
+
+.search-row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:18px;
+}
+
+.search-row input{
+    flex:1;
+    min-width:0;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+input,
+select{
+
+    width:100%;
+
+    min-height:44px;
+
+    padding:10px 13px;
+
+    border:1px solid var(--border);
+
+    border-radius:10px;
+
+    outline:none;
+
+    background:var(--input-bg);
+
+    color:var(--text);
+
+    font-size:14px;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+input::placeholder{
+    color:var(--muted);
+}
+
+input:focus,
+select:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(25,118,255,.12);
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.primary,
+.action-btn{
+
+    border:0;
+
+    border-radius:9px;
+
+    padding:10px 14px;
+
+    min-height:42px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.primary{
+
+    background:var(--primary);
+
+    color:#ffffff;
+}
+
+.primary:hover{
+
+    background:var(--primary-hover);
+
+    transform:translateY(-1px);
+
+    box-shadow:
+        0 8px 22px
+        rgba(25,118,255,.28);
+}
+
+.action-btn{
+
+    background:rgba(255,255,255,.06);
+
+    color:var(--text);
+
+    border:1px solid var(--border);
+}
+
+.action-btn:hover{
+
+    transform:translateY(-1px);
+
+    background:rgba(255,255,255,.10);
+}
+
+.action-btn.success{
+    color:var(--success);
+}
+
+.action-btn.warning{
+    color:var(--warning);
+}
+
+.action-btn.danger{
+    color:var(--danger);
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrap{
+
+    width:100%;
+
+    overflow-x:auto;
+
+    border-radius:12px;
+}
+
+
+/* IMPORTANT:
+   THIS FIX REMOVES WHITE ROW */
+table,
+thead,
+tbody,
+tr,
+td,
+th{
+
+    background:transparent !important;
+}
+
+
+/* no white row */
+
+table{
+
+    width:100%;
+
+    min-width:950px;
+
+    border-collapse:collapse;
+
+    color:var(--text);
+}
+
+thead{
+
+    background:transparent !important;
+}
+
+th{
+
+    padding:14px 12px;
+
+    text-align:left;
+
+    color:var(--muted);
+
+    font-size:13px;
+
+    font-weight:700;
+
+    border-bottom:
+        1px solid var(--border);
+
+    white-space:nowrap;
+}
+
+td{
+
+    padding:15px 12px;
+
+    text-align:left;
+
+    border-bottom:
+        1px solid var(--border);
+
+    color:var(--text);
+
+    background:transparent !important;
+}
+
+
+/* row */
+
+tbody tr{
+
+    background:transparent !important;
+
+    transition:
+        background .2s ease;
+}
+
+tbody tr:hover{
+
+    background:
+        rgba(255,255,255,.035)
+        !important;
+}
+
+body.light-mode tbody tr:hover{
+
+    background:
+        rgba(25,118,255,.045)
+        !important;
+}
+
+
+/* =========================================================
+   EMPLOYEE CELL
+========================================================= */
+
+.employee-cell{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.employee-avatar{
+
+    width:40px;
+    height:40px;
+
+    flex:0 0 40px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1976ff,
+            #705cff
+        );
+
+    color:#ffffff;
+
+    font-size:13px;
+
+    font-weight:800;
+}
+
+.employee-name{
+
+    color:var(--text);
+
+    font-weight:700;
+
+    white-space:nowrap;
+}
+
+.employee-email{
+
+    margin-top:3px;
+
+    color:var(--muted);
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:5px 10px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    white-space:nowrap;
+}
+
+.status.paid{
+
+    color:var(--success);
+
+    background:
+        rgba(34,197,94,.12);
+}
+
+.status.pending{
+
+    color:var(--warning);
+
+    background:
+        rgba(245,158,11,.12);
+}
+
+.status.active{
+
+    color:#60a5fa;
+
+    background:
+        rgba(96,165,250,.12);
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.btn-row{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:7px;
+}
+
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
+.activity-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+}
+
+.activity-header h2{
+
+    margin:0 0 5px;
+
+    font-size:21px;
+}
+
+#activityList{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:9px;
+
+    margin-top:16px;
+}
+
+.activity-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px;
+
+    border:1px solid var(--border);
+
+    border-radius:11px;
+
+    background:transparent !important;
+}
+
+.activity-icon{
+
+    width:36px;
+    height:36px;
+
+    flex:0 0 36px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:9px;
+
+    background:
+        rgba(25,118,255,.12);
+}
+
+.activity-message{
+
+    color:var(--text);
+
+    font-size:13px;
+
+    font-weight:600;
+}
+
+.activity-time{
+
+    margin-top:3px;
+
+    color:var(--muted);
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:9999;
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    background:
+        rgba(0,0,0,.68);
+
+    backdrop-filter:
+        blur(5px);
+}
+
+.modal.show{
+
+    display:flex;
+}
+
+.modal-box{
+
+    width:
+        min(560px,100%);
+
+    max-height:90vh;
+
+    overflow-y:auto;
+
+    padding:23px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--card-bg),
+            var(--card-bg-2)
+        );
+
+    color:var(--text);
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.4);
+
+    animation:
+        modalIn .22s ease;
+}
+
+@keyframes modalIn{
+
+    from{
+        opacity:0;
+        transform:
+            translateY(15px)
+            scale(.98);
+    }
+
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.modal-box h2{
+
+    margin:0 0 20px;
+
+    font-size:22px;
+}
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:14px;
+}
+
+.form-group{
+
+    margin-bottom:14px;
+}
+
+.form-group.full{
+
+    grid-column:
+        1 / -1;
+}
+
+.form-group label{
+
+    display:block;
+
+    margin-bottom:6px;
+
+    color:var(--text);
+
+    font-size:13px;
+
+    font-weight:700;
+}
+
+.modal-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    margin-top:18px;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+
+    position:fixed;
+
+    right:22px;
+    bottom:22px;
+
+    z-index:10000;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    max-width:
+        calc(100vw - 30px);
+
+    padding:14px 17px;
+
+    border-radius:12px;
+
+    background:#18243a;
+
+    color:#ffffff;
+
+    border-left:
+        4px solid var(--success);
+
+    box-shadow:
+        0 15px 40px
+        rgba(0,0,0,.35);
+
+    animation:
+        toastIn .25s ease;
+}
+
+.toast.error{
+
+    border-left-color:
+        var(--danger);
+}
+
+@keyframes toastIn{
+
+    from{
+        opacity:0;
+        transform:
+            translateY(12px);
+    }
+
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1050px){
+
+    .cards{
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:700px){
+
+    .page-header h1{
+
+        font-size:29px;
+    }
+
+    .cards{
+
+        grid-template-columns:1fr;
+    }
+
+    .search-row{
+
+        flex-direction:column;
+
+        align-items:stretch;
+    }
+
+    .search-row button{
+
+        width:100%;
+    }
+
+    .form-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full{
+
+        grid-column:auto;
+    }
+
+    .modal{
+
+        padding:10px;
+    }
+
+    .modal-box{
+
+        padding:18px;
+
+        border-radius:15px;
+    }
+
+    .activity-header{
+
+        align-items:flex-start;
+
+        flex-direction:column;
+    }
+
+    .activity-header button{
+
+        width:auto;
+    }
+}
+
+@media(max-width:480px){
+
+    .panel{
+
+        padding:14px;
+    }
+
+    .stat-card{
+
+        padding:16px;
+    }
+
+    .btn-row{
+
+        flex-direction:column;
+    }
+
+    .btn-row .action-btn{
+
+        width:100%;
+    }
+
+    .toast{
+
+        right:12px;
+        bottom:12px;
+
+        width:
+            calc(100vw - 24px);
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        FedEx Admin
+    </div>
+
+    <ul class="menu">
+
+        <li>
+            <a href="INDEX.HTML">
+                🏠 Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="employees.html">
+                👨‍💼 Employees
+            </a>
+        </li>
+
+        <li>
+            <a href="attendance.html">
+                🗓️ Attendance
+            </a>
+        </li>
+
+        <li>
+            <a
+                href="salary.html"
+                class="active">
+
+                💰 Salary
+
+            </a>
+        </li>
+
+        <li>
+            <a href="reports.html">
+                📊 Reports
+            </a>
+        </li>
+
+        <li>
+            <a href="settings.html">
+                ⚙️ Settings
+            </a>
+        </li>
+
+        <li>
+            <a
+                href="#"
+                onclick="logout();return false;">
+
+                🚪 Logout
+
+            </a>
+        </li>
+
+    </ul>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+
+    <div class="navbar">
+
+        <div id="clock">
+            10:00:00 AM
+        </div>
+
+        <div class="nav-right">
+
+            <button
+                id="darkBtn"
+                class="dark-btn"
+                type="button"
+                onclick="toggleDarkMode()">
+
+                🌙 Dark Mode
+
+            </button>
+
+            <div
+                class="profile"
+                id="navProfile">
+
+                DG
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="page-header">
+
+        <h1>
+            Salary Management
+        </h1>
+
+        <p class="subtitle">
+            Manage employees, salaries and monthly payroll
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         STATS
+    ================================================= -->
+
+    <div class="cards">
+
+        <div class="stat-card">
+
+            <p>
+                Total Payroll
+            </p>
+
+            <h2 id="totalPayroll">
+                ₹0
+            </h2>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <p>
+                Paid This Month
+            </p>
+
+            <h2 id="paidSalary">
+                ₹0
+            </h2>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <p>
+                Pending Salary
+            </p>
+
+            <h2 id="pendingSalary">
+                ₹0
+            </h2>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <p>
+                Employees
+            </p>
+
+            <h2 id="employeeCount">
+                0
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         EMPLOYEE PANEL
+    ================================================= -->
+
+    <div class="panel">
+
+
+        <div class="search-row">
+
+            <input
+                id="employeeSearch"
+                type="text"
+                placeholder="🔍 Search employee by name, email, department...">
+
+
+            <button
+                class="primary"
+                type="button"
+                onclick="openEmployeeModal()">
+
+                ＋ Add Employee
+
+            </button>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Employee
+                        </th>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            Phone
+                        </th>
+
+                        <th>
+                            Salary
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="employeeTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SALARY PANEL
+    ================================================= -->
+
+    <div class="panel">
+
+
+        <div class="search-row">
+
+            <input
+                id="salarySearch"
+                type="text"
+                placeholder="🔍 Search salary employee...">
+
+
+            <button
+                class="primary"
+                type="button"
+                onclick="openSalaryModal()">
+
+                ＋ Add Salary
+
+            </button>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Employee
+                        </th>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            Basic Salary
+                        </th>
+
+                        <th>
+                            Bonus
+                        </th>
+
+                        <th>
+                            Deductions
+                        </th>
+
+                        <th>
+                            Net Salary
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="salaryTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ACTIVITY
+    ================================================= -->
+
+    <div class="panel">
+
+        <div class="activity-header">
+
+            <div>
+
+                <h2>
+                    💰 Salary Activity
+                </h2>
+
+                <p class="subtitle">
+                    Recent salary related actions
+                </p>
+
+            </div>
+
+
+            <button
+                class="action-btn"
+                type="button"
+                onclick="clearActivities()">
+
+                Clear
+
+            </button>
+
+        </div>
+
+
+        <div id="activityList">
+
+        </div>
+
+    </div>
+
+
+</main>
+
+
+<!-- =====================================================
+     EMPLOYEE MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="employeeModal">
+
+    <div class="modal-box">
+
+
+        <h2 id="employeeModalTitle">
+            Add Employee
+        </h2>
+
+
+        <div class="form-grid">
+
+
+            <div class="form-group full">
+
+                <label>
+                    Full Name *
+                </label>
+
+                <input
+                    id="employeeName"
+                    type="text"
+                    placeholder="Enter employee name">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Email *
+                </label>
+
+                <input
+                    id="employeeEmail"
+                    type="email"
+                    placeholder="employee@example.com">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Phone *
+                </label>
+
+                <input
+                    id="employeePhone"
+                    type="text"
+                    placeholder="9876543210">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Department
+                </label>
+
+                <select id="employeeDepartment">
+
+                    <option value="IT">
+                        IT
+                    </option>
+
+                    <option value="HR">
+                        HR
+                    </option>
+
+                    <option value="Finance">
+                        Finance
+                    </option>
+
+                    <option value="Operations">
+                        Operations
+                    </option>
+
+                    <option value="Sales">
+                        Sales
+                    </option>
+
+                    <option value="Management">
+                        Management
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Monthly Salary
+                </label>
+
+                <input
+                    id="employeeSalary"
+                    type="number"
+                    min="0"
+                    placeholder="50000">
+
+            </div>
+
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                class="action-btn"
+                type="button"
+                onclick="closeEmployeeModal()">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                class="primary"
+                type="button"
+                onclick="saveEmployee()">
+
+                💾 Save Employee
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SALARY MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="salaryModal">
+
+    <div class="modal-box">
+
+
+        <h2 id="salaryModalTitle">
+            Add Salary
+        </h2>
+
+
+        <div class="form-group">
+
+            <label>
+                Employee
+            </label>
+
+            <select
+                id="salaryEmployee">
+            </select>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+            <div class="form-group">
+
+                <label>
+                    Basic Salary
+                </label>
+
+                <input
+                    id="basicSalary"
+                    type="number"
+                    min="0"
+                    placeholder="50000">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Bonus
+                </label>
+
+                <input
+                    id="bonus"
+                    type="number"
+                    min="0"
+                    value="0">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Deductions
+                </label>
+
+                <input
+                    id="deductions"
+                    type="number"
+                    min="0"
+                    value="0">
+
+            </div>
+
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <p>
+                Net Salary
+            </p>
+
+            <h2 id="netSalaryPreview">
+                ₹0
+            </h2>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                class="action-btn"
+                type="button"
+                onclick="closeSalaryModal()">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                class="primary"
+                type="button"
+                onclick="saveSalary()">
+
+                💾 Save Salary
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   STORAGE KEYS
+========================================================= */
+
+const EMPLOYEE_KEY =
+    "fedexEmployees";
+
+const SALARY_KEY =
+    "fedexSalaries";
+
+const ACTIVITY_KEY =
+    "fedexSalaryActivities";
+
+
+/* =========================================================
+   STORAGE HELPERS
+========================================================= */
+
+function getEmployees(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(
+                EMPLOYEE_KEY
+            ) || "[]"
+        );
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+function saveEmployees(employees){
+
+    localStorage.setItem(
+        EMPLOYEE_KEY,
+        JSON.stringify(employees)
+    );
+
+}
+
+
+function getSalaries(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(
+                SALARY_KEY
+            ) || "{}"
+        );
+
+    }catch(error){
+
+        return {};
+
+    }
+
+}
+
+
+function saveSalaries(salaries){
+
+    localStorage.setItem(
+        SALARY_KEY,
+        JSON.stringify(salaries)
+    );
+
+}
+
+
+function getActivities(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(
+                ACTIVITY_KEY
+            ) || "[]"
+        );
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+function normalizeId(id){
+
+    return String(id);
+
+}
+
+
+/* =========================================================
+   FORMAT
+========================================================= */
+
+function formatMoney(value){
+
+    return "₹" +
+        Number(value || 0)
+            .toLocaleString("en-IN");
+
+}
+
+
+function escapeHtml(value){
+
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+function getInitials(name){
+
+    return String(name || "NA")
+        .trim()
+        .split(/\s+/)
+        .slice(0,2)
+        .map(
+            word =>
+                word[0]
+                    ?.toUpperCase() || ""
+        )
+        .join("");
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(
+    message,
+    type="success"
+){
+
+    const oldToast =
+        document.querySelector(
+            ".toast"
+        );
+
+    if(oldToast){
+        oldToast.remove();
+    }
+
+
+    const toast =
+        document.createElement(
+            "div"
+        );
+
+    toast.className =
+        "toast" +
+        (
+            type === "error"
+                ? " error"
+                : ""
+        );
+
+
+    toast.innerHTML = `
+        <span>
+            ${
+                type === "error"
+                    ? "⚠️"
+                    : "✅"
+            }
+        </span>
+
+        <span>
+            ${escapeHtml(message)}
+        </span>
+    `;
+
+
+    document.body.appendChild(
+        toast
+    );
+
+
+    setTimeout(()=>{
+
+        toast.remove();
+
+    },2500);
+
+}
+
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
+function addActivity(
+    message,
+    icon="💰"
+){
+
+    const activities =
+        getActivities();
+
+
+    activities.unshift({
+
+        message,
+
+        icon,
+
+        time:
+            new Date().toISOString()
+
+    });
+
+
+    localStorage.setItem(
+        ACTIVITY_KEY,
+        JSON.stringify(
+            activities.slice(0,30)
+        )
+    );
+
+}
+
+
+function renderActivities(){
+
+    const list =
+        document.getElementById(
+            "activityList"
+        );
+
+
+    const activities =
+        getActivities();
+
+
+    if(!activities.length){
+
+        list.innerHTML = `
+
+            <div class="activity-item">
+
+                <div class="activity-icon">
+                    📭
+                </div>
+
+                <div>
+
+                    <div class="activity-message">
+                        No recent activity
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        activities
+            .map(item=>{
+
+                const date =
+                    new Date(
+                        item.time
+                    );
+
+
+                return `
+
+                    <div class="activity-item">
+
+                        <div class="activity-icon">
+
+                            ${escapeHtml(
+                                item.icon || "💰"
+                            )}
+
+                        </div>
+
+                        <div>
+
+                            <div class="activity-message">
+
+                                ${escapeHtml(
+                                    item.message
+                                )}
+
+                            </div>
+
+                            <div class="activity-time">
+
+                                ${date.toLocaleString(
+                                    "en-IN"
+                                )}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            })
+            .join("");
+
+}
+
+
+function clearActivities(){
+
+    localStorage.removeItem(
+        ACTIVITY_KEY
+    );
+
+    renderActivities();
+
+    showToast(
+        "Activity history cleared"
+    );
+
+}
+
+
+/* =========================================================
+   EMPLOYEE MODAL
+========================================================= */
+
+let editingEmployeeId = null;
+
+
+function openEmployeeModal(
+    employeeId = null
+){
+
+    editingEmployeeId =
+        employeeId !== null
+            ? normalizeId(employeeId)
+            : null;
+
+
+    const modal =
+        document.getElementById(
+            "employeeModal"
+        );
+
+
+    if(editingEmployeeId){
+
+        const employee =
+            getEmployees().find(
+                item =>
+                    normalizeId(
+                        item.id
+                    ) ===
+                    editingEmployeeId
+            );
+
+
+        if(!employee){
+            return;
+        }
+
+
+        document.getElementById(
+            "employeeModalTitle"
+        ).textContent =
+            "Edit Employee";
+
+
+        document.getElementById(
+            "employeeName"
+        ).value =
+            employee.name || "";
+
+
+        document.getElementById(
+            "employeeEmail"
+        ).value =
+            employee.email || "";
+
+
+        document.getElementById(
+            "employeePhone"
+        ).value =
+            employee.phone || "";
+
+
+        document.getElementById(
+            "employeeDepartment"
+        ).value =
+            employee.department ||
+            "IT";
+
+
+        document.getElementById(
+            "employeeSalary"
+        ).value =
+            employee.salary || "";
+
+    }else{
+
+        document.getElementById(
+            "employeeModalTitle"
+        ).textContent =
+            "Add Employee";
+
+
+        document.getElementById(
+            "employeeName"
+        ).value = "";
+
+
+        document.getElementById(
+            "employeeEmail"
+        ).value = "";
+
+
+        document.getElementById(
+            "employeePhone"
+        ).value = "";
+
+
+        document.getElementById(
+            "employeeDepartment"
+        ).value = "IT";
+
+
+        document.getElementById(
+            "employeeSalary"
+        ).value = "";
+
+    }
+
+
+    modal.classList.add(
+        "show"
+    );
+
+
+    setTimeout(()=>{
+
+        document.getElementById(
+            "employeeName"
+        ).focus();
+
+    },50);
+
+}
+
+
+function closeEmployeeModal(){
+
+    document.getElementById(
+        "employeeModal"
+    ).classList.remove(
+        "show"
+    );
+
+    editingEmployeeId =
+        null;
+
+}
+
+
+/* =========================================================
+   SAVE EMPLOYEE
+========================================================= */
+
+function saveEmployee(){
+
+    const name =
+        document.getElementById(
+            "employeeName"
+        ).value.trim();
+
+
+    const email =
+        document.getElementById(
+            "employeeEmail"
+        ).value.trim();
+
+
+    const phone =
+        document.getElementById(
+            "employeePhone"
+        ).value.trim();
+
+
+    const department =
+        document.getElementById(
+            "employeeDepartment"
+        ).value;
+
+
+    const salary =
+        Number(
+            document.getElementById(
+                "employeeSalary"
+            ).value || 0
+        );
+
+
+    if(!name){
+
+        showToast(
+            "Please enter employee name",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(!email){
+
+        showToast(
+            "Please enter employee email",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+            .test(email)
+    ){
+
+        showToast(
+            "Please enter a valid email",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(!phone){
+
+        showToast(
+            "Please enter employee phone",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    let employees =
+        getEmployees();
+
+
+    /* =========================
+       EDIT
+    ========================= */
+
+    if(editingEmployeeId){
+
+        const index =
+            employees.findIndex(
+                employee =>
+                    normalizeId(
+                        employee.id
+                    ) ===
+                    editingEmployeeId
+            );
+
+
+        if(index === -1){
+
+            showToast(
+                "Employee not found",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        employees[index] = {
+
+            ...employees[index],
+
+            name,
+
+            email,
+
+            phone,
+
+            department,
+
+            salary
+
+        };
+
+
+        saveEmployees(
+            employees
+        );
+
+
+        addActivity(
+            `${name} employee details updated`,
+            "✏️"
+        );
+
+
+        closeEmployeeModal();
+
+        renderAll();
+
+        showToast(
+            "Employee updated successfully"
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       DUPLICATE
+    ========================= */
+
+    const duplicate =
+        employees.some(
+            employee =>
+                String(
+                    employee.email || ""
+                )
+                .toLowerCase() ===
+                email.toLowerCase()
+        );
+
+
+    if(duplicate){
+
+        showToast(
+            "Employee with this email already exists",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       CREATE
+    ========================= */
+
+    const employee = {
+
+        id:Date.now(),
+
+        name,
+
+        email,
+
+        phone,
+
+        department,
+
+        salary,
+
+        status:"Active",
+
+        createdAt:
+            new Date().toISOString()
+
+    };
+
+
+    employees.push(
+        employee
+    );
+
+
+    saveEmployees(
+        employees
+    );
+
+
+    /* Create salary record */
+
+    const salaries =
+        getSalaries();
+
+
+    salaries[
+        normalizeId(
+            employee.id
+        )
+    ] = {
+
+        basic:salary,
+
+        bonus:0,
+
+        deductions:0,
+
+        status:"Pending"
+
+    };
+
+
+    saveSalaries(
+        salaries
+    );
+
+
+    addActivity(
+        `${name} added as a new employee`,
+        "👨‍💼"
+    );
+
+
+    closeEmployeeModal();
+
+    renderAll();
+
+    showToast(
+        "Employee added successfully"
+    );
+
+}
+
+
+/* =========================================================
+   EMPLOYEE TABLE
+========================================================= */
+
+function renderEmployeeTable(){
+
+    const employees =
+        getEmployees();
+
+
+    const search =
+        document.getElementById(
+            "employeeSearch"
+        ).value
+            .trim()
+            .toLowerCase();
+
+
+    const filtered =
+        employees.filter(
+            employee=>{
+
+                const text = `
+
+                    ${employee.name || ""}
+
+                    ${employee.email || ""}
+
+                    ${employee.phone || ""}
+
+                    ${employee.department || ""}
+
+                `.toLowerCase();
+
+
+                return text.includes(
+                    search
+                );
+
+            }
+        );
+
+
+    const table =
+        document.getElementById(
+            "employeeTable"
+        );
+
+
+    if(!filtered.length){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    style="
+                        text-align:center;
+                        padding:35px;
+                        color:var(--muted);
+                        background:transparent !important;
+                    ">
+
+                    📭 No employees found
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    table.innerHTML =
+        filtered
+            .map(employee=>{
+
+                const id =
+                    normalizeId(
+                        employee.id
+                    );
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+
+                            <div class="employee-cell">
+
+                                <div class="employee-avatar">
+
+                                    ${escapeHtml(
+                                        getInitials(
+                                            employee.name
+                                        )
+                                    )}
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="employee-name">
+
+                                        ${escapeHtml(
+                                            employee.name
+                                        )}
+
+                                    </div>
+
+
+                                    <div class="employee-email">
+
+                                        ${escapeHtml(
+                                            employee.email
+                                        )}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            ${escapeHtml(
+                                employee.department ||
+                                "General"
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            ${escapeHtml(
+                                employee.phone ||
+                                "-"
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            ${formatMoney(
+                                employee.salary
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="status active">
+
+                                ${escapeHtml(
+                                    employee.status ||
+                                    "Active"
+                                )}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="btn-row">
+
+                                <button
+                                    class="action-btn"
+                                    type="button"
+                                    onclick="openEmployeeModal('${id}')">
+
+                                    ✏️ Edit
+
+                                </button>
+
+
+                                <button
+                                    class="action-btn danger"
+                                    type="button"
+                                    onclick="deleteEmployee('${id}')">
+
+                                    🗑️ Delete
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            })
+            .join("");
+
+}
+
+
+/* =========================================================
+   DELETE EMPLOYEE
+========================================================= */
+
+function deleteEmployee(
+    employeeId
+){
+
+    const id =
+        normalizeId(
+            employeeId
+        );
+
+
+    const employees =
+        getEmployees();
+
+
+    const employee =
+        employees.find(
+            item =>
+                normalizeId(
+                    item.id
+                ) === id
+        );
+
+
+    if(!employee){
+        return;
+    }
+
+
+    if(
+        !confirm(
+            `Delete ${employee.name}?`
+        )
+    ){
+        return;
+    }
+
+
+    const updated =
+        employees.filter(
+            item =>
+                normalizeId(
+                    item.id
+                ) !== id
+        );
+
+
+    saveEmployees(
+        updated
+    );
+
+
+    const salaries =
+        getSalaries();
+
+
+    delete salaries[id];
+
+
+    saveSalaries(
+        salaries
+    );
+
+
+    addActivity(
+        `${employee.name} was removed`,
+        "🗑️"
+    );
+
+
+    renderAll();
+
+
+    showToast(
+        "Employee deleted successfully"
+    );
+
+}
+
+
+/* =========================================================
+   SALARY
+========================================================= */
+
+function getSalaryForEmployee(
+    employee
+){
+
+    const salaries =
+        getSalaries();
+
+
+    const id =
+        normalizeId(
+            employee.id
+        );
+
+
+    if(salaries[id]){
+
+        return {
+
+            basic:
+                Number(
+                    salaries[id].basic ||
+                    0
+                ),
+
+            bonus:
+                Number(
+                    salaries[id].bonus ||
+                    0
+                ),
+
+            deductions:
+                Number(
+                    salaries[id].deductions ||
+                    0
+                ),
+
+            status:
+                salaries[id].status ||
+                "Pending"
+
+        };
+
+    }
+
+
+    return {
+
+        basic:
+            Number(
+                employee.salary ||
+                0
+            ),
+
+        bonus:0,
+
+        deductions:0,
+
+        status:"Pending"
+
+    };
+
+}
+
+
+function calculateNet(
+    basic,
+    bonus,
+    deductions
+){
+
+    return (
+        Number(basic || 0) +
+        Number(bonus || 0) -
+        Number(deductions || 0)
+    );
+
+}
+
+
+/* =========================================================
+   SALARY TABLE
+========================================================= */
+
+function renderSalaryTable(){
+
+    const employees =
+        getEmployees();
+
+
+    const search =
+        document.getElementById(
+            "salarySearch"
+        ).value
+            .trim()
+            .toLowerCase();
+
+
+    const filtered =
+        employees.filter(
+            employee=>{
+
+                const text = `
+
+                    ${employee.name || ""}
+
+                    ${employee.email || ""}
+
+                    ${employee.department || ""}
+
+                `.toLowerCase();
+
+
+                return text.includes(
+                    search
+                );
+
+            }
+        );
+
+
+    const table =
+        document.getElementById(
+            "salaryTable"
+        );
+
+
+    if(!filtered.length){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    style="
+                        text-align:center;
+                        padding:35px;
+                        color:var(--muted);
+                        background:transparent !important;
+                    ">
+
+                    📭 No employees found
+
+                </td>
+
+            </tr>
+
+        `;
+
+        updateStats();
+
+        return;
+
+    }
+
+
+    table.innerHTML =
+        filtered
+            .map(employee=>{
+
+                const salary =
+                    getSalaryForEmployee(
+                        employee
+                    );
+
+
+                const net =
+                    calculateNet(
+                        salary.basic,
+                        salary.bonus,
+                        salary.deductions
+                    );
+
+
+                const id =
+                    normalizeId(
+                        employee.id
+                    );
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+
+                            <div class="employee-cell">
+
+                                <div class="employee-avatar">
+
+                                    ${escapeHtml(
+                                        getInitials(
+                                            employee.name
+                                        )
+                                    )}
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="employee-name">
+
+                                        ${escapeHtml(
+                                            employee.name
+                                        )}
+
+                                    </div>
+
+
+                                    <div class="employee-email">
+
+                                        ${escapeHtml(
+                                            employee.email ||
+                                            ""
+                                        )}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            ${escapeHtml(
+                                employee.department ||
+                                "General"
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            ${formatMoney(
+                                salary.basic
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            ${formatMoney(
+                                salary.bonus
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            ${formatMoney(
+                                salary.deductions
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+
+                                ${formatMoney(
+                                    net
+                                )}
+
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="status ${
+                                    salary.status === "Paid"
+                                        ? "paid"
+                                        : "pending"
+                                }">
+
+                                ${escapeHtml(
+                                    salary.status
+                                )}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="btn-row">
+
+                                <button
+                                    class="action-btn"
+                                    type="button"
+                                    onclick="openSalaryModal('${id}')">
+
+                                    ✏️ Edit
+
+                                </button>
+
+
+                                <button
+                                    class="action-btn ${
+                                        salary.status === "Paid"
+                                            ? "warning"
+                                            : "success"
+                                    }"
+                                    type="button"
+                                    onclick="toggleSalaryStatus('${id}')">
+
+                                    ${
+                                        salary.status === "Paid"
+                                            ? "⏳ Pending"
+                                            : "✓ Mark Paid"
+                                    }
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            })
+            .join("");
+
+
+    updateStats();
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(){
+
+    const employees =
+        getEmployees();
+
+
+    let total = 0;
+
+    let paid = 0;
+
+    let pending = 0;
+
+
+    employees.forEach(
+        employee=>{
+
+            const salary =
+                getSalaryForEmployee(
+                    employee
+                );
+
+
+            const net =
+                calculateNet(
+                    salary.basic,
+                    salary.bonus,
+                    salary.deductions
+                );
+
+
+            total += net;
+
+
+            if(
+                salary.status === "Paid"
+            ){
+
+                paid += net;
+
+            }else{
+
+                pending += net;
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "totalPayroll"
+    ).textContent =
+        formatMoney(total);
+
+
+    document.getElementById(
+        "paidSalary"
+    ).textContent =
+        formatMoney(paid);
+
+
+    document.getElementById(
+        "pendingSalary"
+    ).textContent =
+        formatMoney(pending);
+
+
+    document.getElementById(
+        "employeeCount"
+    ).textContent =
+        employees.length;
+
+}
+
+
+/* =========================================================
+   SALARY MODAL
+========================================================= */
+
+let editingSalaryId = null;
+
+
+function openSalaryModal(
+    employeeId = null
+){
+
+    const employees =
+        getEmployees();
+
+
+    if(!employees.length){
+
+        showToast(
+            "First add an employee",
+            "error"
+        );
+
+
+        openEmployeeModal();
+
+        return;
+
+    }
+
+
+    const select =
+        document.getElementById(
+            "salaryEmployee"
+        );
+
+
+    select.innerHTML =
+        employees
+            .map(
+                employee=>`
+
+                    <option
+                        value="${escapeHtml(
+                            normalizeId(
+                                employee.id
+                            )
+                        )}">
+
+                        ${escapeHtml(
+                            employee.name
+                        )}
+
+                    </option>
+
+                `
+            )
+            .join("");
+
+
+    editingSalaryId =
+        employeeId !== null
+            ? normalizeId(employeeId)
+            : null;
+
+
+    if(editingSalaryId){
+
+        const employee =
+            employees.find(
+                item =>
+                    normalizeId(
+                        item.id
+                    ) ===
+                    editingSalaryId
+            );
+
+
+        if(!employee){
+            return;
+        }
+
+
+        select.value =
+            editingSalaryId;
+
+
+        const salary =
+            getSalaryForEmployee(
+                employee
+            );
+
+
+        document.getElementById(
+            "salaryModalTitle"
+        ).textContent =
+            "Edit Salary";
+
+
+        document.getElementById(
+            "basicSalary"
+        ).value =
+            salary.basic;
+
+
+        document.getElementById(
+            "bonus"
+        ).value =
+            salary.bonus;
+
+
+        document.getElementById(
+            "deductions"
+        ).value =
+            salary.deductions;
+
+    }else{
+
+        document.getElementById(
+            "salaryModalTitle"
+        ).textContent =
+            "Add Salary";
+
+
+        select.value =
+            normalizeId(
+                employees[0].id
+            );
+
+
+        const salary =
+            getSalaryForEmployee(
+                employees[0]
+            );
+
+
+        document.getElementById(
+            "basicSalary"
+        ).value =
+            salary.basic || "";
+
+
+        document.getElementById(
+            "bonus"
+        ).value =
+            salary.bonus || 0;
+
+
+        document.getElementById(
+            "deductions"
+        ).value =
+            salary.deductions || 0;
+
+    }
+
+
+    updateNetPreview();
+
+
+    document.getElementById(
+        "salaryModal"
+    ).classList.add(
+        "show"
+    );
+
+}
+
+
+function closeSalaryModal(){
+
+    document.getElementById(
+        "salaryModal"
+    ).classList.remove(
+        "show"
+    );
+
+    editingSalaryId =
+        null;
+
+}
+
+
+/* =========================================================
+   NET PREVIEW
+========================================================= */
+
+function updateNetPreview(){
+
+    const basic =
+        Number(
+            document.getElementById(
+                "basicSalary"
+            ).value || 0
+        );
+
+
+    const bonus =
+        Number(
+            document.getElementById(
+                "bonus"
+            ).value || 0
+        );
+
+
+    const deductions =
+        Number(
+            document.getElementById(
+                "deductions"
+            ).value || 0
+        );
+
+
+    const net =
+        calculateNet(
+            basic,
+            bonus,
+            deductions
+        );
+
+
+    document.getElementById(
+        "netSalaryPreview"
+    ).textContent =
+        formatMoney(net);
+
+}
+
+
+/* =========================================================
+   SAVE SALARY
+========================================================= */
+
+function saveSalary(){
+
+    const employeeId =
+        normalizeId(
+            document.getElementById(
+                "salaryEmployee"
+            ).value
+        );
+
+
+    const basic =
+        Number(
+            document.getElementById(
+                "basicSalary"
+            ).value || 0
+        );
+
+
+    const bonus =
+        Number(
+            document.getElementById(
+                "bonus"
+            ).value || 0
+        );
+
+
+    const deductions =
+        Number(
+            document.getElementById(
+                "deductions"
+            ).value || 0
+        );
+
+
+    if(!employeeId){
+
+        showToast(
+            "Please select employee",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(basic <= 0){
+
+        showToast(
+            "Please enter a valid basic salary",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        deductions >
+        basic + bonus
+    ){
+
+        showToast(
+            "Deductions cannot exceed salary",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const employees =
+        getEmployees();
+
+
+    const employee =
+        employees.find(
+            item =>
+                normalizeId(
+                    item.id
+                ) === employeeId
+        );
+
+
+    if(!employee){
+
+        showToast(
+            "Employee not found",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const salaries =
+        getSalaries();
+
+
+    const oldSalary =
+        salaries[employeeId];
+
+
+    salaries[employeeId] = {
+
+        basic,
+
+        bonus,
+
+        deductions,
+
+        status:
+            oldSalary?.status ||
+            "Pending"
+
+    };
+
+
+    saveSalaries(
+        salaries
+    );
+
+
+    employee.salary =
+        basic;
+
+
+    saveEmployees(
+        employees
+    );
+
+
+    addActivity(
+        `${employee.name}'s salary updated`,
+        "💰"
+    );
+
+
+    closeSalaryModal();
+
+    renderAll();
+
+
+    showToast(
+        "Salary saved successfully"
+    );
+
+}
+
+
+/* =========================================================
+   TOGGLE PAID
+========================================================= */
+
+function toggleSalaryStatus(
+    employeeId
+){
+
+    const id =
+        normalizeId(
+            employeeId
+        );
+
+
+    const employees =
+        getEmployees();
+
+
+    const employee =
+        employees.find(
+            item =>
+                normalizeId(
+                    item.id
+                ) === id
+        );
+
+
+    if(!employee){
+        return;
+    }
+
+
+    const salaries =
+        getSalaries();
+
+
+    const salary =
+        getSalaryForEmployee(
+            employee
+        );
+
+
+    salary.status =
+        salary.status === "Paid"
+            ? "Pending"
+            : "Paid";
+
+
+    salaries[id] =
+        salary;
+
+
+    saveSalaries(
+        salaries
+    );
+
+
+    addActivity(
+        `${employee.name}'s salary marked ${salary.status}`,
+        salary.status === "Paid"
+            ? "💵"
+            : "⏳"
+    );
+
+
+    renderAll();
+
+
+    showToast(
+        `${employee.name} salary is ${salary.status}`
+    );
+
+}
+
+
+/* =========================================================
+   RENDER ALL
+========================================================= */
+
+function renderAll(){
+
+    renderEmployeeTable();
+
+    renderSalaryTable();
+
+    renderActivities();
+
+    updateStats();
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+document
+    .getElementById(
+        "employeeSearch"
+    )
+    .addEventListener(
+        "input",
+        renderEmployeeTable
+    );
+
+
+document
+    .getElementById(
+        "salarySearch"
+    )
+    .addEventListener(
+        "input",
+        renderSalaryTable
+    );
+
+
+/* =========================================================
+   SALARY LIVE CALCULATION
+========================================================= */
+
+[
+    "basicSalary",
+    "bonus",
+    "deductions"
+
+].forEach(id=>{
+
+    document
+        .getElementById(id)
+        .addEventListener(
+            "input",
+            updateNetPreview
+        );
+
+});
+
+
+/* =========================================================
+   EMPLOYEE SELECT CHANGE
+========================================================= */
+
+document
+    .getElementById(
+        "salaryEmployee"
+    )
+    .addEventListener(
+        "change",
+        function(){
+
+            const employee =
+                getEmployees().find(
+                    item =>
+                        normalizeId(
+                            item.id
+                        ) ===
+                        normalizeId(
+                            this.value
+                        )
+                );
+
+
+            if(!employee){
+                return;
+            }
+
+
+            const salary =
+                getSalaryForEmployee(
+                    employee
+                );
+
+
+            document.getElementById(
+                "basicSalary"
+            ).value =
+                salary.basic;
+
+
+            document.getElementById(
+                "bonus"
+            ).value =
+                salary.bonus;
+
+
+            document.getElementById(
+                "deductions"
+            ).value =
+                salary.deductions;
+
+
+            updateNetPreview();
+
+        }
+    );
+
+
+/* =========================================================
+   MODAL OUTSIDE CLICK
+========================================================= */
+
+document
+    .getElementById(
+        "employeeModal"
+    )
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target === this
+            ){
+
+                closeEmployeeModal();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "salaryModal"
+    )
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target === this
+            ){
+
+                closeSalaryModal();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   ESC
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Escape"
+        ){
+
+            closeEmployeeModal();
+
+            closeSalaryModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+function applyTheme(){
+
+    const dark =
+        localStorage.getItem(
+            "fedexDarkMode"
+        ) !== "false";
+
+
+    document.body.classList.toggle(
+        "light-mode",
+        !dark
+    );
+
+
+    const button =
+        document.getElementById(
+            "darkBtn"
+        );
+
+
+    button.textContent =
+        dark
+            ? "☀️ Light Mode"
+            : "🌙 Dark Mode";
+
+}
+
+
+function toggleDarkMode(){
+
+    const currentlyLight =
+        document.body.classList.contains(
+            "light-mode"
+        );
+
+
+    localStorage.setItem(
+        "fedexDarkMode",
+        String(currentlyLight)
+    );
+
+
+    applyTheme();
+
+}
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function updateClock(){
+
+    const clock =
+        document.getElementById(
+            "clock"
+        );
+
+
+    clock.textContent =
+        new Date()
+            .toLocaleTimeString(
+                "en-IN",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit",
+                    second:"2-digit"
+                }
+            );
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logout(){
+
+    if(
+        confirm(
+            "Are you sure you want to logout?"
+        )
+    ){
+
+        window.location.href =
+            "INDEX.HTML";
+
+    }
+
+}
+
+
+/* =========================================================
+   STORAGE SYNC
+========================================================= */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+
+            event.key === EMPLOYEE_KEY ||
+
+            event.key === SALARY_KEY ||
+
+            event.key === ACTIVITY_KEY
+
+        ){
+
+            renderAll();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        applyTheme();
+
+        updateClock();
+
+        setInterval(
+            updateClock,
+            1000
+        );
+
+        renderAll();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Employees - FedEx Admin</title>
+
+    <link rel="stylesheet" href="STYLE.CSS">
+</head>
+
+<body>
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            📦 FedEx Admin
+        </div>
+
+        <ul class="menu">
+
+            <li>
+                <a href="INDEX.HTML">
+                    🏠 Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="employees.html" class="active">
+                    👥 Employees
+                </a>
+            </li>
+
+            <li>
+                <a href="attendance.html">
+                    📅 Attendance
+                </a>
+            </li>
+
+            <li>
+                <a href="salary.html">
+                    💰 Salary
+                </a>
+            </li>
+
+            <li>
+                <a href="reports.html">
+                    📊 Reports
+                </a>
+            </li>
+
+            <li>
+                <a href="settings.html">
+                    ⚙️ Settings
+                </a>
+            </li>
+
+            <li>
+                <a href="#" onclick="logout(); return false;">
+                    🚪 Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+        <!-- NAVBAR -->
+
+        <div class="navbar">
+
+            <div>
+                <strong id="clock">
+                    10:00:00 AM
+                </strong>
+            </div>
+
+            <div class="nav-right">
+
+                <button
+                    id="darkBtn"
+                    class="dark-btn">
+                    🌙 Dark Mode
+                </button>
+
+                <div class="profile">
+                    AD
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= PAGE HEADER ================= -->
+
+        <div class="page-header">
+
+            <div>
+
+                <h1>
+                    Employees
+                </h1>
+
+                <p>
+                    Manage employee information
+                </p>
+
+            </div>
+
+            <button
+                class="primary"
+                onclick="openEmployeeModal()">
+
+                ➕ Add Employee
+
+            </button>
+
+        </div>
+
+
+        <!-- ================= STATS ================= -->
+
+        <div class="cards">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👥
+                </div>
+
+                <div>
+
+                    <h3 id="totalEmployees">
+                        0
+                    </h3>
+
+                    <p>
+                        Total Employees
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    💰
+                </div>
+
+                <div>
+
+                    <h3 id="totalSalary">
+                        ₹0
+                    </h3>
+
+                    <p>
+                        Total Salary
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🏢
+                </div>
+
+                <div>
+
+                    <h3 id="totalDepartments">
+                        0
+                    </h3>
+
+                    <p>
+                        Departments
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📍
+                </div>
+
+                <div>
+
+                    <h3 id="totalLocations">
+                        0
+                    </h3>
+
+                    <p>
+                        Locations
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= SEARCH ================= -->
+
+        <div class="panel">
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Search Employee
+                    </label>
+
+                    <input
+                        type="text"
+                        id="searchEmployee"
+                        placeholder="Search by name, phone, company..."
+                        oninput="renderEmployees()">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Department
+                    </label>
+
+                    <select
+                        id="departmentFilter"
+                        onchange="renderEmployees()">
+
+                        <option value="">
+                            All Departments
+                        </option>
+
+                        <option value="IT">
+                            IT
+                        </option>
+
+                        <option value="HR">
+                            HR
+                        </option>
+
+                        <option value="Finance">
+                            Finance
+                        </option>
+
+                        <option value="Operations">
+                            Operations
+                        </option>
+
+                        <option value="Sales">
+                            Sales
+                        </option>
+
+                        <option value="Marketing">
+                            Marketing
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= EMPLOYEE TABLE ================= -->
+
+        <div class="table-card">
+
+            <div class="table-header">
+
+                <div>
+
+                    <h3>
+                        Employee List
+                    </h3>
+
+                    <p>
+                        All registered employees
+                    </p>
+
+                </div>
+
+                <strong id="employeeCount">
+                    0 Employees
+                </strong>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Employee</th>
+
+                            <th>Age</th>
+
+                            <th>Phone</th>
+
+                            <th>Address</th>
+
+                            <th>Department</th>
+
+                            <th>Salary</th>
+
+                            <th>Company</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="employeeTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= RECENT ACTIVITY ================= -->
+
+        <div class="panel">
+
+            <div class="activity-header">
+
+                <div>
+
+                    <h2>
+                        Recent Activity
+                    </h2>
+
+                    <p class="subtitle">
+                        Latest employee activities
+                    </p>
+
+                </div>
+
+                <button
+                    class="clear-btn"
+                    onclick="clearActivities()">
+
+                    Clear
+
+                </button>
+
+            </div>
+
+
+            <div id="activityList">
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ================= ADD / EDIT MODAL ================= -->
+
+    <div
+        class="modal"
+        id="employeeModal">
+
+        <div class="modal-box">
+
+            <h2 id="modalTitle">
+                Add Employee
+            </h2>
+
+
+            <input
+                type="hidden"
+                id="employeeId">
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="empName"
+                        placeholder="Enter employee name">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Age
+                    </label>
+
+                    <input
+                        type="number"
+                        id="empAge"
+                        min="18"
+                        max="100"
+                        placeholder="Enter age">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Phone
+                    </label>
+
+                    <input
+                        type="text"
+                        id="empPhone"
+                        maxlength="10"
+                        placeholder="10 digit phone number">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Address
+                    </label>
+
+                    <input
+                        type="text"
+                        id="empAddress"
+                        placeholder="Enter address">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Department
+                    </label>
+
+                    <select id="empDepartment">
+
+                        <option value="IT">
+                            IT
+                        </option>
+
+                        <option value="HR">
+                            HR
+                        </option>
+
+                        <option value="Finance">
+                            Finance
+                        </option>
+
+                        <option value="Operations">
+                            Operations
+                        </option>
+
+                        <option value="Sales">
+                            Sales
+                        </option>
+
+                        <option value="Marketing">
+                            Marketing
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Salary
+                    </label>
+
+                    <input
+                        type="number"
+                        id="empSalary"
+                        min="0"
+                        max="10000000"
+                        placeholder="Enter salary">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Company
+                </label>
+
+                <input
+                    type="text"
+                    id="empCompany"
+                    placeholder="Enter company">
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    class="danger"
+                    type="button"
+                    onclick="closeEmployeeModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    class="primary"
+                    type="button"
+                    onclick="saveEmployee()">
+
+                    💾 Save Employee
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- COMMON JS -->
+
+    <script src="app.js"></script>
+
+
+    <!-- ================= EMPLOYEE JS ================= -->
+
+    <script>
+
+        /* =========================================
+           DEFAULT EMPLOYEES
+        ========================================= */
+
+        const defaultEmployees = [
+
+            {
+                id: 1,
+                name: "Neha Sharma",
+                age: 28,
+                phone: "9876543210",
+                address: "Delhi",
+                department: "IT",
+                salary: 50000,
+                company: "Amazon"
+            },
+
+            {
+                id: 2,
+                name: "Priya Verma",
+                age: 26,
+                phone: "9898989898",
+                address: "Noida",
+                department: "HR",
+                salary: 45000,
+                company: "TCS"
+            },
+
+            {
+                id: 3,
+                name: "Amit Singh",
+                age: 30,
+                phone: "9811122233",
+                address: "Gurgaon",
+                department: "Finance",
+                salary: 60000,
+                company: "Infosys"
+            },
+
+            {
+                id: 4,
+                name: "Rahul Kumar",
+                age: 29,
+                phone: "9876500000",
+                address: "Delhi",
+                department: "Operations",
+                salary: 55000,
+                company: "FedEx"
+            }
+
+        ];
+
+
+        /* =========================================
+           GET EMPLOYEES
+        ========================================= */
+
+        function getEmployees() {
+
+            try {
+
+                const saved =
+                    localStorage.getItem(
+                        "fedexEmployees"
+                    );
+
+                if (saved) {
+
+                    return JSON.parse(saved);
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Employee data error:",
+                    error
+                );
+
+            }
+
+
+            localStorage.setItem(
+                "fedexEmployees",
+                JSON.stringify(defaultEmployees)
+            );
+
+            return [...defaultEmployees];
+
+        }
+
+
+        /* =========================================
+           SAVE EMPLOYEES
+        ========================================= */
+
+        function saveEmployees(employees) {
+
+            try {
+
+                localStorage.setItem(
+                    "fedexEmployees",
+                    JSON.stringify(employees)
+                );
+
+                return true;
+
+            } catch (error) {
+
+                console.error(
+                    "Could not save employees:",
+                    error
+                );
+
+                alert(
+                    "Employee data could not be saved."
+                );
+
+                return false;
+
+            }
+
+        }
+
+
+        /* =========================================
+           MONEY
+        ========================================= */
+
+        function money(value) {
+
+            return "₹" +
+                Number(value || 0)
+                    .toLocaleString("en-IN");
+
+        }
+
+
+        /* =========================================
+           RENDER EMPLOYEES
+        ========================================= */
+
+        function renderEmployees() {
+
+            const employees =
+                getEmployees();
+
+
+            const search =
+                (
+                    document.getElementById(
+                        "searchEmployee"
+                    ).value || ""
+                )
+                .trim()
+                .toLowerCase();
+
+
+            const department =
+                document.getElementById(
+                    "departmentFilter"
+                ).value;
+
+
+            const filtered =
+                employees.filter(employee => {
+
+                    const name =
+                        String(
+                            employee.name || ""
+                        ).toLowerCase();
+
+                    const phone =
+                        String(
+                            employee.phone || ""
+                        ).toLowerCase();
+
+                    const company =
+                        String(
+                            employee.company || ""
+                        ).toLowerCase();
+
+                    const address =
+                        String(
+                            employee.address || ""
+                        ).toLowerCase();
+
+                    const matchesSearch =
+                        !search ||
+                        name.includes(search) ||
+                        phone.includes(search) ||
+                        company.includes(search) ||
+                        address.includes(search);
+
+
+                    const matchesDepartment =
+                        !department ||
+                        employee.department === department;
+
+
+                    return (
+                        matchesSearch &&
+                        matchesDepartment
+                    );
+
+                });
+
+
+            document.getElementById(
+                "employeeCount"
+            ).textContent =
+                filtered.length +
+                (
+                    filtered.length === 1
+                        ? " Employee"
+                        : " Employees"
+                );
+
+
+            const table =
+                document.getElementById(
+                    "employeeTable"
+                );
+
+
+            if (!filtered.length) {
+
+                table.innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="9"
+                            class="empty">
+
+                            📭 No employees found
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+                return;
+
+            }
+
+
+            table.innerHTML =
+                filtered.map(employee => `
+
+                    <tr>
+
+                        <td>
+                            #${employee.id}
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                ${escapeHtml(
+                                    employee.name
+                                )}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+                            ${employee.age}
+                        </td>
+
+
+                        <td>
+                            ${escapeHtml(
+                                employee.phone
+                            )}
+                        </td>
+
+
+                        <td>
+                            ${escapeHtml(
+                                employee.address
+                            )}
+                        </td>
+
+
+                        <td>
+
+                            <span class="status active">
+
+                                ${escapeHtml(
+                                    employee.department
+                                )}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                ${money(
+                                    employee.salary
+                                )}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+                            ${escapeHtml(
+                                employee.company
+                            )}
+                        </td>
+
+
+                        <td>
+
+                            <div class="btn-row">
+
+                                <button
+                                    class="action-btn"
+                                    type="button"
+                                    onclick="editEmployee(${employee.id})">
+
+                                    ✏️
+
+                                </button>
+
+
+                                <button
+                                    class="action-btn danger"
+                                    type="button"
+                                    onclick="deleteEmployee(${employee.id})">
+
+                                    🗑️
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                `).join("");
+
+        }
+
+
+        /* =========================================
+           UPDATE STATS
+        ========================================= */
+
+        function updateStats() {
+
+            const employees =
+                getEmployees();
+
+
+            document.getElementById(
+                "totalEmployees"
+            ).textContent =
+                employees.length;
+
+
+            const totalSalary =
+                employees.reduce(
+                    (total, employee) => {
+
+                        return total +
+                            Number(
+                                employee.salary || 0
+                            );
+
+                    },
+                    0
+                );
+
+
+            document.getElementById(
+                "totalSalary"
+            ).textContent =
+                money(totalSalary);
+
+
+            const departments =
+                new Set(
+                    employees.map(
+                        employee =>
+                            employee.department
+                    )
+                );
+
+
+            document.getElementById(
+                "totalDepartments"
+            ).textContent =
+                departments.size;
+
+
+            const locations =
+                new Set(
+                    employees.map(
+                        employee =>
+                            employee.address
+                    )
+                );
+
+
+            document.getElementById(
+                "totalLocations"
+            ).textContent =
+                locations.size;
+
+        }
+
+
+        /* =========================================
+           OPEN ADD MODAL
+        ========================================= */
+
+        function openEmployeeModal() {
+
+            document.getElementById(
+                "modalTitle"
+            ).textContent =
+                "Add Employee";
+
+
+            document.getElementById(
+                "employeeId"
+            ).value = "";
+
+
+            document.getElementById(
+                "empName"
+            ).value = "";
+
+
+            document.getElementById(
+                "empAge"
+            ).value = "";
+
+
+            document.getElementById(
+                "empPhone"
+            ).value = "";
+
+
+            document.getElementById(
+                "empAddress"
+            ).value = "";
+
+
+            document.getElementById(
+                "empDepartment"
+            ).value = "IT";
+
+
+            document.getElementById(
+                "empSalary"
+            ).value = "";
+
+
+            document.getElementById(
+                "empCompany"
+            ).value = "";
+
+
+            document.getElementById(
+                "employeeModal"
+            ).classList.add("show");
+
+        }
+
+
+        /* =========================================
+           CLOSE MODAL
+        ========================================= */
+
+        function closeEmployeeModal() {
+
+            document.getElementById(
+                "employeeModal"
+            ).classList.remove("show");
+
+        }
+
+
+        /* =========================================
+           SAVE EMPLOYEE
+        ========================================= */
+
+        function saveEmployee() {
+
+            const name =
+                document.getElementById(
+                    "empName"
+                ).value.trim();
+
+
+            const age =
+                Number(
+                    document.getElementById(
+                        "empAge"
+                    ).value
+                );
+
+
+            const phone =
+                document.getElementById(
+                    "empPhone"
+                ).value.trim();
+
+
+            const address =
+                document.getElementById(
+                    "empAddress"
+                ).value.trim();
+
+
+            const department =
+                document.getElementById(
+                    "empDepartment"
+                ).value;
+
+
+            const salary =
+                Number(
+                    document.getElementById(
+                        "empSalary"
+                    ).value
+                );
+
+
+            const company =
+                document.getElementById(
+                    "empCompany"
+                ).value.trim();
+
+
+            const editId =
+                Number(
+                    document.getElementById(
+                        "employeeId"
+                    ).value
+                );
+
+
+            /* ================= VALIDATION ================= */
+
+            if (!name) {
+
+                alert(
+                    "Please enter employee name."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                !age ||
+                age < 18 ||
+                age > 100
+            ) {
+
+                alert(
+                    "Please enter a valid age between 18 and 100."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                !/^[0-9]{10}$/.test(phone)
+            ) {
+
+                alert(
+                    "Phone number must contain exactly 10 digits."
+                );
+
+                return;
+
+            }
+
+
+            if (!address) {
+
+                alert(
+                    "Please enter address."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                !salary ||
+                salary <= 0 ||
+                salary > 10000000
+            ) {
+
+                alert(
+                    "Please enter a valid salary between ₹1 and ₹1,00,00,000."
+                );
+
+                return;
+
+            }
+
+
+            if (!company) {
+
+                alert(
+                    "Please enter company name."
+                );
+
+                return;
+
+            }
+
+
+            /* ================= GET DATA ================= */
+
+            const employees =
+                getEmployees();
+
+
+            /* ================= EDIT ================= */
+
+            if (editId) {
+
+                const index =
+                    employees.findIndex(
+                        employee =>
+                            employee.id === editId
+                    );
+
+
+                if (index === -1) {
+
+                    alert(
+                        "Employee not found."
+                    );
+
+                    return;
+
+                }
+
+
+                employees[index] = {
+
+                    ...employees[index],
+
+                    name,
+                    age,
+                    phone,
+                    address,
+                    department,
+                    salary,
+                    company
+
+                };
+
+
+                /*
+                    IMPORTANT:
+                    Save FIRST.
+                    Activity comes AFTER save.
+                */
+
+                const saved =
+                    saveEmployees(employees);
+
+
+                if (!saved) return;
+
+
+                closeEmployeeModal();
+
+                renderEmployees();
+
+                updateStats();
+
+
+                /*
+                    Activity is optional.
+                    Employee data is already safely saved.
+                */
+
+                try {
+
+                    if (
+                        typeof addActivity ===
+                        "function"
+                    ) {
+
+                        addActivity(
+                            name +
+                            " details updated",
+                            "✏️"
+                        );
+
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "Activity error:",
+                        error
+                    );
+
+                }
+
+
+                try {
+
+                    if (
+                        typeof showToast ===
+                        "function"
+                    ) {
+
+                        showToast(
+                            "Employee updated successfully!"
+                        );
+
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "Toast error:",
+                        error
+                    );
+
+                }
+
+
+                return;
+
+            }
+
+
+            /* ================= ADD ================= */
+
+            const newId =
+                employees.length
+                    ? Math.max(
+                        ...employees.map(
+                            employee =>
+                                Number(
+                                    employee.id
+                                ) || 0
+                        )
+                    ) + 1
+                    : 1;
+
+
+            const newEmployee = {
+
+                id: newId,
+
+                name,
+
+                age,
+
+                phone,
+
+                address,
+
+                department,
+
+                salary,
+
+                company
+
+            };
+
+
+            employees.push(
+                newEmployee
+            );
+
+
+            /*
+                IMPORTANT:
+                SAVE BEFORE ACTIVITY.
+            */
+
+            const saved =
+                saveEmployees(
+                    employees
+                );
+
+
+            if (!saved) return;
+
+
+            /*
+                Immediately update UI.
+            */
+
+            renderEmployees();
+
+            updateStats();
+
+            closeEmployeeModal();
+
+
+            /*
+                Activity cannot break save.
+            */
+
+            try {
+
+                if (
+                    typeof addActivity ===
+                    "function"
+                ) {
+
+                    addActivity(
+                        name +
+                        " added as new employee",
+                        "👤"
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Activity error:",
+                    error
+                );
+
+            }
+
+
+            try {
+
+                if (
+                    typeof renderActivities ===
+                    "function"
+                ) {
+
+                    renderActivities();
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Activity render error:",
+                    error
+                );
+
+            }
+
+
+            try {
+
+                if (
+                    typeof showToast ===
+                    "function"
+                ) {
+
+                    showToast(
+                        "Employee added successfully!"
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Toast error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           EDIT EMPLOYEE
+        ========================================= */
+
+        function editEmployee(id) {
+
+            const employee =
+                getEmployees().find(
+                    employee =>
+                        employee.id === id
+                );
+
+
+            if (!employee) {
+
+                alert(
+                    "Employee not found."
+                );
+
+                return;
+
+            }
+
+
+            document.getElementById(
+                "modalTitle"
+            ).textContent =
+                "Edit Employee";
+
+
+            document.getElementById(
+                "employeeId"
+            ).value =
+                employee.id;
+
+
+            document.getElementById(
+                "empName"
+            ).value =
+                employee.name || "";
+
+
+            document.getElementById(
+                "empAge"
+            ).value =
+                employee.age || "";
+
+
+            document.getElementById(
+                "empPhone"
+            ).value =
+                employee.phone || "";
+
+
+            document.getElementById(
+                "empAddress"
+            ).value =
+                employee.address || "";
+
+
+            document.getElementById(
+                "empDepartment"
+            ).value =
+                employee.department || "IT";
+
+
+            document.getElementById(
+                "empSalary"
+            ).value =
+                employee.salary || "";
+
+
+            document.getElementById(
+                "empCompany"
+            ).value =
+                employee.company || "";
+
+
+            document.getElementById(
+                "employeeModal"
+            ).classList.add("show");
+
+        }
+
+
+        /* =========================================
+           DELETE EMPLOYEE
+        ========================================= */
+
+        function deleteEmployee(id) {
+
+            const employees =
+                getEmployees();
+
+
+            const employee =
+                employees.find(
+                    employee =>
+                        employee.id === id
+                );
+
+
+            if (!employee) return;
+
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to delete " +
+                    employee.name +
+                    "?"
+                );
+
+
+            if (!confirmed) return;
+
+
+            const updated =
+                employees.filter(
+                    employee =>
+                        employee.id !== id
+                );
+
+
+            /*
+                SAVE FIRST.
+            */
+
+            const saved =
+                saveEmployees(
+                    updated
+                );
+
+
+            if (!saved) return;
+
+
+            renderEmployees();
+
+            updateStats();
+
+
+            try {
+
+                if (
+                    typeof addActivity ===
+                    "function"
+                ) {
+
+                    addActivity(
+                        employee.name +
+                        " deleted",
+                        "🗑️"
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Activity error:",
+                    error
+                );
+
+            }
+
+
+            try {
+
+                if (
+                    typeof showToast ===
+                    "function"
+                ) {
+
+                    showToast(
+                        employee.name +
+                        " deleted successfully!"
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Toast error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           MODAL OUTSIDE CLICK
+        ========================================= */
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                const modal =
+                    document.getElementById(
+                        "employeeModal"
+                    );
+
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closeEmployeeModal();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================
+           ESCAPE CLOSE
+        ========================================= */
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    closeEmployeeModal();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================
+           INITIAL LOAD
+        ========================================= */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                /*
+                    Create default data only
+                    if it doesn't already exist.
+                */
+
+                if (
+                    !localStorage.getItem(
+                        "fedexEmployees"
+                    )
+                ) {
+
+                    saveEmployees(
+                        defaultEmployees
+                    );
+
+                }
+
+
+                renderEmployees();
+
+                updateStats();
+
+
+                if (
+                    typeof renderActivities ===
+                    "function"
+                ) {
+
+                    renderActivities();
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

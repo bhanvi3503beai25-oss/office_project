@@ -1,0 +1,2352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holiday Calendar - FedEx Admin</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f5f6fa;
+    color:#222;
+    transition:.25s;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:250px;
+    height:100vh;
+    background:#fff;
+    border-right:1px solid #e5e7eb;
+    padding:25px 15px;
+    z-index:100;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+    color:#4d148c;
+    margin-bottom:35px;
+    padding-left:15px;
+}
+
+.logo span{
+    color:#ff6200;
+}
+
+.menu{
+    list-style:none;
+}
+
+.menu li{
+    margin-bottom:8px;
+}
+
+.menu a{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    text-decoration:none;
+    color:#555;
+    padding:13px 15px;
+    border-radius:10px;
+    font-size:15px;
+    transition:.25s;
+}
+
+.menu a:hover{
+    background:#f2eaff;
+    color:#4d148c;
+}
+
+.menu a.active{
+    background:#4d148c;
+    color:white;
+}
+
+.icon{
+    width:22px;
+    text-align:center;
+}
+
+/* MAIN */
+
+.main{
+    margin-left:250px;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+
+.navbar{
+    height:70px;
+    background:#fff;
+    border-bottom:1px solid #e5e7eb;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+    transition:.25s;
+}
+
+.page-title{
+    font-size:22px;
+    font-weight:700;
+}
+
+.navbar-right{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.avatar{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#4d148c;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+.theme-toggle{
+    border:1px solid #ddd;
+    background:#fff;
+    color:#333;
+    padding:9px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+/* CONTENT */
+
+.content{
+    padding:30px;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    margin-bottom:25px;
+}
+
+.stat-card{
+    background:#fff;
+    padding:22px;
+    border-radius:14px;
+    border:1px solid #e7e7e7;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.stat-info p{
+    color:#777;
+    font-size:14px;
+    margin-bottom:8px;
+}
+
+.stat-info h2{
+    font-size:27px;
+}
+
+.stat-icon{
+    width:48px;
+    height:48px;
+    border-radius:12px;
+    background:#f1e7ff;
+    color:#4d148c;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+}
+
+/* TOOLBAR */
+
+.toolbar{
+    background:#fff;
+    padding:18px;
+    border-radius:14px;
+    margin-bottom:20px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    border:1px solid #e7e7e7;
+}
+
+.search{
+    flex:1;
+    min-width:220px;
+    padding:12px 15px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    outline:none;
+    background:#fff;
+    color:#222;
+}
+
+.search:focus{
+    border-color:#4d148c;
+}
+
+.btn{
+    border:none;
+    padding:12px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+.btn-primary{
+    background:#4d148c;
+    color:#fff;
+}
+
+.btn-secondary{
+    background:#eef0f3;
+    color:#333;
+}
+
+.btn-danger{
+    background:#dc2626;
+    color:#fff;
+}
+
+/* CALENDAR */
+
+.calendar-card{
+    background:#fff;
+    border:1px solid #e7e7e7;
+    border-radius:14px;
+    overflow:hidden;
+}
+
+.calendar-header{
+    padding:20px 22px;
+    border-bottom:1px solid #eee;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.month-title{
+    font-size:22px;
+    font-weight:700;
+}
+
+.calendar-actions{
+    display:flex;
+    gap:8px;
+}
+
+.calendar-btn{
+    width:40px;
+    height:40px;
+    border:1px solid #ddd;
+    background:#fff;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.calendar-btn:hover{
+    background:#f3e8ff;
+    color:#4d148c;
+}
+
+/* WEEKDAYS */
+
+.weekdays{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    background:#fafafa;
+    border-bottom:1px solid #eee;
+}
+
+.weekdays div{
+    padding:14px 8px;
+    text-align:center;
+    color:#777;
+    font-size:13px;
+    font-weight:600;
+}
+
+/* DAYS */
+
+.calendar-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+}
+
+.day{
+    min-height:125px;
+    border-right:1px solid #eee;
+    border-bottom:1px solid #eee;
+    padding:10px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.day:nth-child(7n){
+    border-right:none;
+}
+
+.day:hover{
+    background:#faf7ff;
+}
+
+.day.other-month{
+    background:#fafafa;
+    color:#aaa;
+}
+
+.day-number{
+    width:30px;
+    height:30px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:50%;
+    font-size:13px;
+    margin-bottom:7px;
+}
+
+.today .day-number{
+    background:#4d148c;
+    color:#fff;
+    font-weight:bold;
+}
+
+.selected-date{
+    background:#eee6ff !important;
+    box-shadow:inset 0 0 0 2px #8b5cf6;
+}
+
+.selected-date .day-number{
+    background:#8b5cf6;
+    color:#fff;
+    font-weight:bold;
+}
+
+.holiday{
+    background:#fff7ed;
+}
+
+.holiday .day-number{
+    color:#ea580c;
+    font-weight:bold;
+}
+
+.holiday-name{
+    background:#4d148c;
+    color:#fff;
+    border-radius:6px;
+    padding:6px 7px;
+    font-size:11px;
+    line-height:1.3;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.holiday-type{
+    font-size:10px;
+    color:#777;
+    margin-top:4px;
+}
+
+.search-match{
+    box-shadow:inset 0 0 0 3px #f59e0b !important;
+}
+
+/* UPCOMING HOLIDAYS */
+
+.upcoming-card{
+    background:#fff;
+    border:1px solid #e7e7e7;
+    border-radius:14px;
+    margin-top:20px;
+    overflow:hidden;
+}
+
+.card-title{
+    padding:20px;
+    border-bottom:1px solid #eee;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.upcoming-list{
+    padding:10px 20px;
+}
+
+.upcoming-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:15px 0;
+    border-bottom:1px solid #eee;
+}
+
+.upcoming-item:last-child{
+    border-bottom:none;
+}
+
+.upcoming-left{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.date-box{
+    width:48px;
+    height:48px;
+    border-radius:10px;
+    background:#f1e7ff;
+    color:#4d148c;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+.date-box strong{
+    font-size:17px;
+}
+
+.date-box small{
+    font-size:10px;
+}
+
+.upcoming-name{
+    font-weight:600;
+}
+
+.upcoming-type{
+    color:#888;
+    font-size:12px;
+    margin-top:4px;
+}
+
+/* MODAL */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:1000;
+}
+
+.modal{
+    background:#fff;
+    width:100%;
+    max-width:520px;
+    border-radius:15px;
+    padding:25px;
+    max-height:90vh;
+    overflow-y:auto;
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+}
+
+.close{
+    border:none;
+    background:transparent;
+    font-size:27px;
+    cursor:pointer;
+}
+
+.form-group{
+    margin-bottom:17px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.form-control{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    outline:none;
+    background:#fff;
+    color:#222;
+}
+
+textarea.form-control{
+    min-height:90px;
+    resize:vertical;
+}
+
+.modal-footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:20px;
+}
+
+.footer-right{
+    display:flex;
+    gap:10px;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#222;
+    color:#fff;
+    padding:14px 20px;
+    border-radius:8px;
+    display:none;
+    z-index:2000;
+}
+
+.empty{
+    text-align:center;
+    padding:30px;
+    color:#777;
+}
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+body.dark-mode{
+    background:#111827;
+    color:#f3f4f6;
+}
+
+body.dark-mode .sidebar,
+body.dark-mode .navbar,
+body.dark-mode .stat-card,
+body.dark-mode .toolbar,
+body.dark-mode .calendar-card,
+body.dark-mode .upcoming-card,
+body.dark-mode .modal{
+    background:#1f2937;
+    border-color:#374151;
+}
+
+body.dark-mode .logo{
+    color:#a855f7;
+}
+
+body.dark-mode .menu a{
+    color:#d1d5db;
+}
+
+body.dark-mode .menu a:hover{
+    background:#374151;
+    color:#c084fc;
+}
+
+body.dark-mode .menu a.active{
+    background:#4d148c;
+    color:#fff;
+}
+
+body.dark-mode .stat-info p{
+    color:#9ca3af;
+}
+
+body.dark-mode .stat-icon{
+    background:#312e81;
+    color:#c4b5fd;
+}
+
+body.dark-mode .theme-toggle{
+    background:#374151;
+    color:#fff;
+    border-color:#4b5563;
+}
+
+body.dark-mode .search{
+    background:#111827;
+    color:#fff;
+    border-color:#4b5563;
+}
+
+body.dark-mode .search::placeholder{
+    color:#9ca3af;
+}
+
+body.dark-mode .calendar-header{
+    border-color:#374151;
+}
+
+body.dark-mode .calendar-btn{
+    background:#374151;
+    color:#fff;
+    border-color:#4b5563;
+}
+
+body.dark-mode .weekdays{
+    background:#111827;
+}
+
+body.dark-mode .weekdays div{
+    color:#9ca3af;
+}
+
+body.dark-mode .day{
+    border-color:#374151;
+}
+
+body.dark-mode .day:hover{
+    background:#374151;
+}
+
+body.dark-mode .day.other-month{
+    background:#17202d;
+}
+
+body.dark-mode .holiday{
+    background:#3a2b1c;
+}
+
+body.dark-mode .selected-date{
+    background:#3b2b59 !important;
+}
+
+body.dark-mode .holiday-type{
+    color:#9ca3af;
+}
+
+body.dark-mode .upcoming-item{
+    border-color:#374151;
+}
+
+body.dark-mode .upcoming-type{
+    color:#9ca3af;
+}
+
+body.dark-mode .date-box{
+    background:#312e81;
+    color:#c4b5fd;
+}
+
+body.dark-mode .close{
+    color:#fff;
+}
+
+body.dark-mode .form-control{
+    background:#111827;
+    color:#fff;
+    border-color:#4b5563;
+}
+
+body.dark-mode .btn-secondary{
+    background:#374151;
+    color:#fff;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1100px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .day{
+        min-height:105px;
+    }
+}
+
+@media(max-width:800px){
+
+    .sidebar{
+        width:70px;
+        padding:20px 8px;
+    }
+
+    .logo{
+        font-size:0;
+        padding:0;
+        text-align:center;
+    }
+
+    .logo::after{
+        content:"F";
+        font-size:25px;
+        color:#4d148c;
+    }
+
+    .menu a{
+        justify-content:center;
+        padding:13px;
+    }
+
+    .menu a span:not(.icon){
+        display:none;
+    }
+
+    .main{
+        margin-left:70px;
+    }
+
+    .content{
+        padding:20px;
+    }
+
+    .day{
+        min-height:90px;
+        padding:6px;
+    }
+
+    .holiday-name{
+        font-size:9px;
+    }
+}
+
+@media(max-width:600px){
+
+    .navbar{
+        padding:0 15px;
+    }
+
+    .page-title{
+        font-size:18px;
+    }
+
+    .profile strong{
+        display:none;
+    }
+
+    .navbar-right{
+        gap:8px;
+    }
+
+    .theme-toggle{
+        padding:8px;
+        font-size:11px;
+    }
+
+    .content{
+        padding:15px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .day{
+        min-height:70px;
+        padding:4px;
+    }
+
+    .day-number{
+        width:25px;
+        height:25px;
+        font-size:11px;
+    }
+
+    .holiday-name{
+        font-size:8px;
+        padding:4px;
+    }
+
+    .holiday-type{
+        display:none;
+    }
+
+    .weekdays div{
+        font-size:10px;
+        padding:10px 2px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        Fed<span>Ex</span>
+    </div>
+
+    <ul class="menu">
+
+        <li>
+            <a href="INDEX.HTML">
+                <span class="icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="employees.html">
+                <span class="icon">👥</span>
+                <span>Employees</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="attendance.html">
+                <span class="icon">📅</span>
+                <span>Attendance</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="salary.html">
+                <span class="icon">💰</span>
+                <span>Salary</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="reports.html">
+                <span class="icon">📈</span>
+                <span>Reports</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="leave.html">
+                <span class="icon">🏖️</span>
+                <span>Leave Management</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="holidays.html" class="active">
+                <span class="icon">🎉</span>
+                <span>Holiday Calendar</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="settings.html">
+                <span class="icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="#">
+                <span class="icon">🚪</span>
+                <span>Logout</span>
+            </a>
+        </li>
+
+    </ul>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+<header class="navbar">
+
+    <div class="page-title">
+        Holiday Calendar
+    </div>
+
+    <div class="navbar-right">
+
+        <button
+            class="theme-toggle"
+            id="themeBtn"
+            onclick="toggleTheme()">
+            🌙 Dark
+        </button>
+
+        <div class="profile">
+            <strong>Admin</strong>
+
+            <div class="avatar">
+                A
+            </div>
+        </div>
+
+    </div>
+
+</header>
+
+
+<section class="content">
+
+<!-- STATS -->
+
+<div class="stats">
+
+    <div class="stat-card">
+
+        <div class="stat-info">
+            <p>Total Holidays</p>
+            <h2 id="totalHolidays">0</h2>
+        </div>
+
+        <div class="stat-icon">🎉</div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-info">
+            <p>Upcoming</p>
+            <h2 id="upcomingHolidays">0</h2>
+        </div>
+
+        <div class="stat-icon">📅</div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-info">
+            <p>National Holidays</p>
+            <h2 id="nationalHolidays">0</h2>
+        </div>
+
+        <div class="stat-icon">🇮🇳</div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-info">
+            <p>Company Holidays</p>
+            <h2 id="companyHolidays">0</h2>
+        </div>
+
+        <div class="stat-icon">🏢</div>
+
+    </div>
+
+</div>
+
+
+<!-- TOOLBAR -->
+
+<div class="toolbar">
+
+    <input
+        type="text"
+        id="searchHoliday"
+        class="search"
+        placeholder="Search holiday..."
+        oninput="handleSearch()">
+
+
+    <input
+        type="date"
+        id="dateSelector"
+        class="btn btn-secondary"
+        onchange="selectDate(this.value)"
+        style="font-family:Arial;cursor:pointer;">
+
+
+    <button
+        class="btn btn-primary"
+        onclick="openHolidayModal()">
+
+        + Add Holiday
+
+    </button>
+
+</div>
+
+
+<!-- CALENDAR -->
+
+<div class="calendar-card">
+
+    <div class="calendar-header">
+
+        <div
+            class="month-title"
+            id="monthTitle">
+        </div>
+
+        <div class="calendar-actions">
+
+            <button
+                class="calendar-btn"
+                onclick="previousMonth()">
+                ‹
+            </button>
+
+            <button
+                class="calendar-btn"
+                onclick="nextMonth()">
+                ›
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="weekdays">
+
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+
+    </div>
+
+
+    <div
+        class="calendar-grid"
+        id="calendarGrid">
+    </div>
+
+</div>
+
+
+<!-- IMPORTANT: UPCOMING HOLIDAYS -->
+
+<div class="upcoming-card">
+
+    <div class="card-title">
+        Upcoming Holidays
+    </div>
+
+    <div
+        class="upcoming-list"
+        id="upcomingList">
+    </div>
+
+</div>
+
+
+</section>
+
+</main>
+
+
+<!-- MODAL -->
+
+<div
+    class="modal-overlay"
+    id="holidayModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                Add Holiday
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeHolidayModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="holidayForm">
+
+            <div class="form-group">
+
+                <label>Holiday Name</label>
+
+                <input
+                    type="text"
+                    id="holidayName"
+                    class="form-control"
+                    placeholder="e.g. Independence Day"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Date</label>
+
+                <input
+                    type="date"
+                    id="holidayDate"
+                    class="form-control"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Holiday Type</label>
+
+                <select
+                    id="holidayType"
+                    class="form-control">
+
+                    <option value="National">
+                        National Holiday
+                    </option>
+
+                    <option value="Company">
+                        Company Holiday
+                    </option>
+
+                    <option value="Regional">
+                        Regional Holiday
+                    </option>
+
+                    <option value="Optional">
+                        Optional Holiday
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Description</label>
+
+                <textarea
+                    id="holidayDescription"
+                    class="form-control"
+                    placeholder="Holiday details..."></textarea>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    id="deleteBtn"
+                    class="btn btn-danger"
+                    style="display:none"
+                    onclick="deleteCurrentHoliday()">
+
+                    🗑 Delete
+
+                </button>
+
+
+                <div class="footer-right">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="closeHolidayModal()">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        Save Holiday
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast">
+</div>
+
+
+<script>
+
+const HOLIDAY_KEY =
+    "fedexHolidays";
+
+let holidays =
+    JSON.parse(
+        localStorage.getItem(
+            HOLIDAY_KEY
+        ) || "[]"
+    );
+
+let currentDate =
+    new Date();
+
+let selectedDate =
+    getDateString(new Date());
+
+let editingHolidayId =
+    null;
+
+
+/* DEFAULT DATA */
+
+function createDefaultHolidays(){
+
+    if(holidays.length > 0) return;
+
+    holidays = [
+
+        {
+            id:"H1",
+            name:"Republic Day",
+            date:"2026-01-26",
+            type:"National",
+            description:"Republic Day of India"
+        },
+
+        {
+            id:"H2",
+            name:"Holi",
+            date:"2026-03-04",
+            type:"National",
+            description:"Festival of Colors"
+        },
+
+        {
+            id:"H3",
+            name:"Good Friday",
+            date:"2026-04-03",
+            type:"National",
+            description:"Good Friday"
+        },
+
+        {
+            id:"H4",
+            name:"Independence Day",
+            date:"2026-08-15",
+            type:"National",
+            description:"Independence Day of India"
+        },
+
+        {
+            id:"H5",
+            name:"Gandhi Jayanti",
+            date:"2026-10-02",
+            type:"National",
+            description:"Gandhi Jayanti"
+        },
+
+        {
+            id:"H6",
+            name:"Diwali",
+            date:"2026-11-08",
+            type:"National",
+            description:"Festival of Lights"
+        },
+
+        {
+            id:"H7",
+            name:"Christmas",
+            date:"2026-12-25",
+            type:"National",
+            description:"Christmas Day"
+        },
+
+        {
+            id:"H8",
+            name:"Company Foundation Day",
+            date:"2026-06-15",
+            type:"Company",
+            description:"Company Foundation Day"
+        }
+
+    ];
+
+    saveHolidays();
+}
+
+
+/* SAVE */
+
+function saveHolidays(){
+
+    localStorage.setItem(
+        HOLIDAY_KEY,
+        JSON.stringify(holidays)
+    );
+
+}
+
+
+/* DATE */
+
+function getDateString(date){
+
+    const y =
+        date.getFullYear();
+
+    const m =
+        String(
+            date.getMonth()+1
+        ).padStart(2,"0");
+
+    const d =
+        String(
+            date.getDate()
+        ).padStart(2,"0");
+
+    return `${y}-${m}-${d}`;
+}
+
+
+/* CALENDAR */
+
+function renderCalendar(){
+
+    const grid =
+        document.getElementById(
+            "calendarGrid"
+        );
+
+    grid.innerHTML="";
+
+
+    const year =
+        currentDate.getFullYear();
+
+    const month =
+        currentDate.getMonth();
+
+
+    document.getElementById(
+        "monthTitle"
+    ).textContent =
+        currentDate.toLocaleDateString(
+            "en-IN",
+            {
+                month:"long",
+                year:"numeric"
+            }
+        );
+
+
+    const firstDay =
+        new Date(
+            year,
+            month,
+            1
+        ).getDay();
+
+
+    const daysInMonth =
+        new Date(
+            year,
+            month+1,
+            0
+        ).getDate();
+
+
+    const previousDays =
+        new Date(
+            year,
+            month,
+            0
+        ).getDate();
+
+
+    for(
+        let i=firstDay-1;
+        i>=0;
+        i--
+    ){
+
+        const date =
+            new Date(
+                year,
+                month-1,
+                previousDays-i
+            );
+
+        grid.appendChild(
+            createDay(
+                date,
+                true
+            )
+        );
+    }
+
+
+    for(
+        let day=1;
+        day<=daysInMonth;
+        day++
+    ){
+
+        const date =
+            new Date(
+                year,
+                month,
+                day
+            );
+
+        grid.appendChild(
+            createDay(
+                date,
+                false
+            )
+        );
+    }
+
+
+    const remaining =
+        42 -
+        grid.children.length;
+
+
+    for(
+        let day=1;
+        day<=remaining;
+        day++
+    ){
+
+        const date =
+            new Date(
+                year,
+                month+1,
+                day
+            );
+
+        grid.appendChild(
+            createDay(
+                date,
+                true
+            )
+        );
+    }
+
+}
+
+
+/* CREATE DAY */
+
+function createDay(
+    date,
+    otherMonth
+){
+
+    const cell =
+        document.createElement(
+            "div"
+        );
+
+    const dateString =
+        getDateString(date);
+
+    cell.className="day";
+
+
+    if(otherMonth){
+
+        cell.classList.add(
+            "other-month"
+        );
+
+    }
+
+
+    const today =
+        getDateString(
+            new Date()
+        );
+
+
+    if(dateString===today){
+
+        cell.classList.add(
+            "today"
+        );
+
+    }
+
+
+    if(
+        dateString===
+        selectedDate
+    ){
+
+        cell.classList.add(
+            "selected-date"
+        );
+
+    }
+
+
+    const holiday =
+        holidays.find(
+            h =>
+                h.date ===
+                dateString
+        );
+
+
+    const search =
+        document.getElementById(
+            "searchHoliday"
+        ).value
+        .trim()
+        .toLowerCase();
+
+
+    if(
+        holiday &&
+        search &&
+        holiday.name
+        .toLowerCase()
+        .includes(search)
+    ){
+
+        cell.classList.add(
+            "search-match"
+        );
+
+    }
+
+
+    if(holiday){
+
+        cell.classList.add(
+            "holiday"
+        );
+
+    }
+
+
+    cell.innerHTML=`
+
+        <div class="day-number">
+            ${date.getDate()}
+        </div>
+
+        ${
+            holiday
+            ?
+            `
+            <div
+                class="holiday-name"
+                title="${escapeHTML(
+                    holiday.name
+                )}">
+
+                ${escapeHTML(
+                    holiday.name
+                )}
+
+            </div>
+
+            <div class="holiday-type">
+
+                ${escapeHTML(
+                    holiday.type
+                )}
+
+            </div>
+            `
+            :
+            ""
+        }
+
+    `;
+
+
+    cell.onclick=function(){
+
+        selectedDate =
+            dateString;
+
+
+        currentDate =
+            new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                1
+            );
+
+
+        updateDatePicker();
+
+        renderCalendar();
+
+
+        if(holiday){
+
+            openEditHoliday(
+                holiday.id
+            );
+
+        }
+
+    };
+
+
+    return cell;
+}
+
+
+/* SEARCH */
+
+function handleSearch(){
+
+    renderCalendar();
+
+    renderUpcoming();
+
+}
+
+
+/* DATE SELECTOR */
+
+function selectDate(value){
+
+    if(!value) return;
+
+    selectedDate =
+        value;
+
+
+    const date =
+        new Date(
+            value+
+            "T00:00:00"
+        );
+
+
+    currentDate =
+        new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            1
+        );
+
+
+    renderCalendar();
+
+    renderUpcoming();
+
+
+    showToast(
+        "Date selected!"
+    );
+
+}
+
+
+/* KEEP DATE PICKER SYNCED */
+
+function updateDatePicker(){
+
+    document.getElementById(
+        "dateSelector"
+    ).value =
+        selectedDate;
+
+}
+
+
+/* MONTH */
+
+function previousMonth(){
+
+    currentDate.setMonth(
+        currentDate.getMonth()-1
+    );
+
+    renderCalendar();
+
+}
+
+
+function nextMonth(){
+
+    currentDate.setMonth(
+        currentDate.getMonth()+1
+    );
+
+    renderCalendar();
+
+}
+
+
+/* UPCOMING */
+
+function renderUpcoming(){
+
+    const container =
+        document.getElementById(
+            "upcomingList"
+        );
+
+
+    const search =
+        document.getElementById(
+            "searchHoliday"
+        ).value
+        .trim()
+        .toLowerCase();
+
+
+    const today =
+        getDateString(
+            new Date()
+        );
+
+
+    const results =
+        holidays
+        .filter(
+            h =>
+                h.date>=today &&
+                (
+                    !search ||
+                    h.name
+                    .toLowerCase()
+                    .includes(search)
+                )
+        )
+        .sort(
+            (a,b)=>
+                a.date.localeCompare(
+                    b.date
+                )
+        );
+
+
+    if(results.length===0){
+
+        container.innerHTML=`
+
+            <div class="empty">
+
+                🎉
+                <br><br>
+
+                No upcoming holidays found.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML="";
+
+
+    results
+    .slice(0,10)
+    .forEach(
+        holiday => {
+
+            const date =
+                new Date(
+                    holiday.date+
+                    "T00:00:00"
+                );
+
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+            item.className=
+                "upcoming-item";
+
+
+            item.innerHTML=`
+
+                <div class="upcoming-left">
+
+                    <div class="date-box">
+
+                        <strong>
+                            ${date.getDate()}
+                        </strong>
+
+                        <small>
+                            ${date.toLocaleDateString(
+                                "en-IN",
+                                {
+                                    month:"short"
+                                }
+                            )}
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="upcoming-name">
+
+                            ${escapeHTML(
+                                holiday.name
+                            )}
+
+                        </div>
+
+                        <div class="upcoming-type">
+
+                            ${escapeHTML(
+                                holiday.type
+                            )}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="openEditHoliday('${holiday.id}')">
+
+                    Edit
+
+                </button>
+
+            `;
+
+
+            container.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* STATS */
+
+function updateStats(){
+
+    const today =
+        getDateString(
+            new Date()
+        );
+
+
+    document.getElementById(
+        "totalHolidays"
+    ).textContent =
+        holidays.length;
+
+
+    document.getElementById(
+        "upcomingHolidays"
+    ).textContent =
+        holidays.filter(
+            h=>h.date>=today
+        ).length;
+
+
+    document.getElementById(
+        "nationalHolidays"
+    ).textContent =
+        holidays.filter(
+            h=>h.type==="National"
+        ).length;
+
+
+    document.getElementById(
+        "companyHolidays"
+    ).textContent =
+        holidays.filter(
+            h=>h.type==="Company"
+        ).length;
+
+}
+
+
+/* ADD */
+
+function openHolidayModal(){
+
+    editingHolidayId=null;
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent=
+        "Add Holiday";
+
+
+    document.getElementById(
+        "holidayForm"
+    ).reset();
+
+
+    document.getElementById(
+        "deleteBtn"
+    ).style.display=
+        "none";
+
+
+    document.getElementById(
+        "holidayModal"
+    ).style.display=
+        "flex";
+
+}
+
+
+/* EDIT */
+
+function openEditHoliday(id){
+
+    const holiday =
+        holidays.find(
+            h=>h.id===id
+        );
+
+
+    if(!holiday) return;
+
+
+    editingHolidayId=id;
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent=
+        "Edit Holiday";
+
+
+    document.getElementById(
+        "holidayName"
+    ).value=
+        holiday.name;
+
+
+    document.getElementById(
+        "holidayDate"
+    ).value=
+        holiday.date;
+
+
+    document.getElementById(
+        "holidayType"
+    ).value=
+        holiday.type;
+
+
+    document.getElementById(
+        "holidayDescription"
+    ).value=
+        holiday.description||"";
+
+
+    document.getElementById(
+        "deleteBtn"
+    ).style.display=
+        "block";
+
+
+    document.getElementById(
+        "holidayModal"
+    ).style.display=
+        "flex";
+
+}
+
+
+/* CLOSE */
+
+function closeHolidayModal(){
+
+    document.getElementById(
+        "holidayModal"
+    ).style.display=
+        "none";
+
+    editingHolidayId=null;
+
+}
+
+
+/* SAVE */
+
+document
+.getElementById("holidayForm")
+.addEventListener(
+    "submit",
+    function(e){
+
+        e.preventDefault();
+
+
+        const name =
+            document.getElementById(
+                "holidayName"
+            ).value.trim();
+
+
+        const date =
+            document.getElementById(
+                "holidayDate"
+            ).value;
+
+
+        const type =
+            document.getElementById(
+                "holidayType"
+            ).value;
+
+
+        const description =
+            document.getElementById(
+                "holidayDescription"
+            ).value.trim();
+
+
+        if(!name || !date){
+
+            showToast(
+                "Please fill required fields."
+            );
+
+            return;
+        }
+
+
+        if(editingHolidayId){
+
+            const holiday =
+                holidays.find(
+                    h =>
+                        h.id===
+                        editingHolidayId
+                );
+
+
+            holiday.name=name;
+            holiday.date=date;
+            holiday.type=type;
+            holiday.description=
+                description;
+
+
+            showToast(
+                "Holiday updated successfully!"
+            );
+
+        }else{
+
+            holidays.push({
+
+                id:
+                    "H"+
+                    Date.now(),
+
+                name,
+                date,
+                type,
+                description
+
+            });
+
+
+            showToast(
+                "Holiday added successfully!"
+            );
+
+        }
+
+
+        saveHolidays();
+
+
+        selectedDate=date;
+
+
+        const selected =
+            new Date(
+                date+
+                "T00:00:00"
+            );
+
+
+        currentDate =
+            new Date(
+                selected.getFullYear(),
+                selected.getMonth(),
+                1
+            );
+
+
+        updateDatePicker();
+
+        renderCalendar();
+
+        renderUpcoming();
+
+        updateStats();
+
+        closeHolidayModal();
+
+    }
+);
+
+
+/* DELETE */
+
+function deleteCurrentHoliday(){
+
+    if(!editingHolidayId)
+        return;
+
+
+    const holiday =
+        holidays.find(
+            h =>
+                h.id===
+                editingHolidayId
+        );
+
+
+    if(!holiday)
+        return;
+
+
+    if(
+        !confirm(
+            `Delete "${holiday.name}"?`
+        )
+    ){
+
+        return;
+
+    }
+
+
+    holidays =
+        holidays.filter(
+            h =>
+                h.id!==
+                editingHolidayId
+        );
+
+
+    saveHolidays();
+
+    renderCalendar();
+
+    renderUpcoming();
+
+    updateStats();
+
+    closeHolidayModal();
+
+
+    showToast(
+        "Holiday deleted successfully!"
+    );
+
+}
+
+
+/* ESCAPE */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* TOAST */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent=message;
+
+    toast.style.display=
+        "block";
+
+
+    setTimeout(
+        ()=>{
+            toast.style.display=
+                "none";
+        },
+        3000
+    );
+
+}
+
+
+/* MODAL OUTSIDE CLICK */
+
+document
+.getElementById(
+    "holidayModal"
+)
+.addEventListener(
+    "click",
+    function(e){
+
+        if(e.target===this){
+
+            closeHolidayModal();
+
+        }
+
+    }
+);
+
+
+/* THEME */
+
+function applyTheme(){
+
+    const theme =
+        localStorage.getItem(
+            "fedexTheme"
+        )||"light";
+
+
+    const button =
+        document.getElementById(
+            "themeBtn"
+        );
+
+
+    if(theme==="dark"){
+
+        document.body.classList.add(
+            "dark-mode"
+        );
+
+        button.innerHTML=
+            "☀️ Light";
+
+    }else{
+
+        document.body.classList.remove(
+            "dark-mode"
+        );
+
+        button.innerHTML=
+            "🌙 Dark";
+
+    }
+
+}
+
+
+function toggleTheme(){
+
+    const dark =
+        document.body.classList.contains(
+            "dark-mode"
+        );
+
+
+    localStorage.setItem(
+        "fedexTheme",
+        dark
+            ?"light"
+            :"dark"
+    );
+
+
+    applyTheme();
+
+}
+
+
+/* INITIALIZE */
+
+createDefaultHolidays();
+
+applyTheme();
+
+updateDatePicker();
+
+renderCalendar();
+
+renderUpcoming();
+
+updateStats();
+
+</script>
+
+</body>
+</html>

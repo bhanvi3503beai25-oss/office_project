@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FedEx Admin - Dashboard</title>
+
+    <link rel="stylesheet" href="STYLE.CSS">
+</head>
+
+<body>
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            📦 FedEx Admin
+        </div>
+
+        <ul class="menu">
+
+            <li>
+                <a href="INDEX.HTML" class="active">
+                    🏠 Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="employees.html">
+                    👥 Employees
+                </a>
+            </li>
+
+            <li>
+                <a href="attendance.html">
+                    📅 Attendance
+                </a>
+            </li>
+
+            <li>
+                <a href="salary.html">
+                    💰 Salary
+                </a>
+            </li>
+
+            <li>
+                <a href="reports.html">
+                    📊 Reports
+                </a>
+            </li>
+
+            <li>
+                <a href="settings.html">
+                    ⚙️ Settings
+                </a>
+            </li>
+
+            <!-- NEW PAGES -->
+
+            <li>
+                <a href="notifications.html">
+                    🔔 Notifications
+                </a>
+            </li>
+
+            <li>
+                <a href="leave-management.html">
+                    📝 Leave Management
+                </a>
+            </li>
+
+            <li>
+                <a href="holiday-calendar.html">
+                    🗓️ Holiday Calendar
+                </a>
+            </li>
+
+            <li>
+                <a href="employee-performance.html">
+                    ⭐ Employee Performance
+                </a>
+            </li>
+
+            <li>
+                <a href="global-search.html">
+                    🔎 Global Search
+                </a>
+            </li>
+
+            <li>
+                <a href="audit-log.html">
+                    📋 Audit Log
+                </a>
+            </li>
+
+            <li>
+                <a href="backup-restore.html">
+                    💾 Backup & Restore
+                </a>
+            </li>
+
+            <li>
+                <a href="#" onclick="logout(); return false;">
+                    🚪 Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+        <!-- NAVBAR -->
+
+        <div class="navbar">
+
+            <div>
+                <strong id="clock">
+                    10:00:00 AM
+                </strong>
+            </div>
+
+            <div class="nav-right">
+
+                <button
+                    id="darkBtn"
+                    class="dark-btn"
+                    onclick="toggleDarkMode()">
+                    🌙 Dark Mode
+                </button>
+
+                <div class="profile">
+                    AD
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <h1>
+                Dashboard
+            </h1>
+
+            <p class="subtitle">
+                Welcome back to FedEx Employee Management
+            </p>
+
+        </div>
+
+
+        <!-- ================= STATS ================= -->
+
+        <div class="cards">
+
+            <div class="card">
+
+                <p>
+                    Total Employees
+                </p>
+
+                <h2 id="totalEmployees">
+                    0
+                </h2>
+
+            </div>
+
+
+            <div class="card">
+
+                <p>
+                    Present Today
+                </p>
+
+                <h2 id="presentToday">
+                    0
+                </h2>
+
+            </div>
+
+
+            <div class="card">
+
+                <p>
+                    Monthly Payroll
+                </p>
+
+                <h2 id="monthlyPayroll">
+                    ₹0
+                </h2>
+
+            </div>
+
+
+            <div class="card">
+
+                <p>
+                    Departments
+                </p>
+
+                <h2 id="departments">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <div class="grid-2">
+
+            <!-- EMPLOYEE TABLE -->
+
+            <div class="table-card">
+
+                <h2>
+                    Employee List
+                </h2>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                                <th>Department</th>
+                                <th>Salary</th>
+                                <th>Attendance</th>
+                                <th>Company</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="dashboardEmployees">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="panel quick">
+
+                <h2>
+                    Quick Actions
+                </h2>
+
+                <button
+                    class="primary"
+                    onclick="location.href='employees.html'">
+
+                    ➕ Add Employee
+
+                </button>
+
+
+                <button
+                    class="primary"
+                    onclick="location.href='attendance.html'">
+
+                    📅 Manage Attendance
+
+                </button>
+
+
+                <button
+                    class="primary"
+                    onclick="location.href='salary.html'">
+
+                    💰 Manage Salary
+
+                </button>
+
+
+                <button
+                    class="primary"
+                    onclick="location.href='reports.html'">
+
+                    📊 View Reports
+
+                </button>
+
+
+                <button
+                    class="primary"
+                    onclick="location.href='notifications.html'">
+
+                    🔔 Notifications
+
+                </button>
+
+
+                <button
+                    class="primary"
+                    onclick="location.href='leave-management.html'">
+
+                    📝 Leave Management
+
+                </button>
+
+
+                <button
+                    class="primary"
+                    onclick="location.href='holiday-calendar.html'">
+
+                    🗓️ Holiday Calendar
+
+                </button>
+
+
+                <button
+                    class="primary"
+                    onclick="location.href='employee-performance.html'">
+
+                    ⭐ Employee Performance
+
+                </button>
+
+
+                <button
+                    class="primary"
+                    onclick="location.href='global-search.html'">
+
+                    🔎 Global Search
+
+                </button>
+
+
+                <button
+                    class="primary"
+                    onclick="location.href='audit-log.html'">
+
+                    📋 Audit Log
+
+                </button>
+
+
+                <button
+                    class="primary"
+                    onclick="location.href='backup-restore.html'">
+
+                    💾 Backup & Restore
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= RECENT ACTIVITY ================= -->
+
+        <div class="panel">
+
+            <div class="activity-header">
+
+                <div>
+
+                    <h2>
+                        Recent Activity
+                    </h2>
+
+                    <p class="subtitle">
+                        Latest actions performed in the system
+                    </p>
+
+                </div>
+
+                <button
+                    class="clear-btn"
+                    onclick="clearActivities()">
+
+                    Clear
+
+                </button>
+
+            </div>
+
+            <div id="activityList">
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= REPORTS ================= -->
+
+        <div class="panel">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:15px;
+                flex-wrap:wrap;
+            ">
+
+                <div>
+
+                    <h2>
+                        📊 Reports
+                    </h2>
+
+                    <p class="subtitle">
+                        View employee, attendance and salary reports.
+                    </p>
+
+                </div>
+
+                <button
+                    class="primary"
+                    onclick="location.href='reports.html'">
+
+                    Open Reports →
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+    <!-- ================= COMMON JS ================= -->
+
+    <script src="app.js"></script>
+
+
+    <!-- ================= DASHBOARD JS ================= -->
+
+    <script>
+
+        /* =========================================
+           DEFAULT EMPLOYEES
+        ========================================= */
+
+        const defaultEmployees = [
+
+            {
+                id: 1,
+                name: "Neha Sharma",
+                age: 28,
+                phone: "9876543210",
+                address: "Delhi",
+                department: "IT",
+                salary: 50000,
+                company: "Amazon"
+            },
+
+            {
+                id: 2,
+                name: "Priya Verma",
+                age: 26,
+                phone: "9898989898",
+                address: "Noida",
+                department: "HR",
+                salary: 45000,
+                company: "TCS"
+            },
+
+            {
+                id: 3,
+                name: "Amit Singh",
+                age: 30,
+                phone: "9811122233",
+                address: "Gurgaon",
+                department: "Finance",
+                salary: 60000,
+                company: "Infosys"
+            },
+
+            {
+                id: 4,
+                name: "Rahul Kumar",
+                age: 29,
+                phone: "9876500000",
+                address: "Delhi",
+                department: "Operations",
+                salary: 55000,
+                company: "FedEx"
+            }
+
+        ];
+
+
+        /* =========================================
+           EMPLOYEES
+        ========================================= */
+
+        function getEmployees() {
+
+            const saved =
+                localStorage.getItem("fedexEmployees");
+
+            if (saved) {
+
+                try {
+                    return JSON.parse(saved);
+                }
+                catch (error) {
+                    console.error(error);
+                }
+
+            }
+
+            localStorage.setItem(
+                "fedexEmployees",
+                JSON.stringify(defaultEmployees)
+            );
+
+            return defaultEmployees;
+
+        }
+
+
+        /* =========================================
+           ATTENDANCE
+        ========================================= */
+
+        function getAttendance() {
+
+            try {
+
+                return JSON.parse(
+                    localStorage.getItem("fedexAttendance") || "{}"
+                );
+
+            }
+            catch (error) {
+
+                return {};
+
+            }
+
+        }
+
+
+        /* =========================================
+           TODAY
+        ========================================= */
+
+        function getToday() {
+
+            return new Date()
+                .toISOString()
+                .split("T")[0];
+
+        }
+
+
+        /* =========================================
+           ESCAPE HTML
+        ========================================= */
+
+        function escapeHtml(value) {
+
+            if (value === null || value === undefined) {
+                return "";
+            }
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        /* =========================================
+           DASHBOARD
+        ========================================= */
+
+        function renderDashboard() {
+
+            const employees =
+                getEmployees();
+
+            const attendance =
+                getAttendance();
+
+            const today =
+                getToday();
+
+
+            /*
+                Supports date-wise format:
+
+                {
+                    "2026-10-05": {
+                        "1": "Present",
+                        "2": "Absent"
+                    }
+                }
+
+                Also safely handles old format.
+            */
+
+            const todayAttendance =
+                attendance[today] || {};
+
+
+            /* TOTAL EMPLOYEES */
+
+            document.getElementById(
+                "totalEmployees"
+            ).textContent = employees.length;
+
+
+            /* PRESENT TODAY */
+
+            let present = 0;
+
+            employees.forEach(employee => {
+
+                const status =
+                    todayAttendance[employee.id] ||
+                    attendance[employee.id];
+
+                if (status === "Present") {
+
+                    present++;
+
+                }
+
+            });
+
+
+            document.getElementById(
+                "presentToday"
+            ).textContent = present;
+
+
+            /* PAYROLL */
+
+            const payroll =
+                employees.reduce(
+                    (total, employee) => {
+
+                        return total +
+                            Number(employee.salary || 0);
+
+                    },
+                    0
+                );
+
+
+            document.getElementById(
+                "monthlyPayroll"
+            ).textContent =
+                "₹" +
+                payroll.toLocaleString("en-IN");
+
+
+            /* DEPARTMENTS */
+
+            const departments =
+                new Set(
+                    employees.map(
+                        employee =>
+                            employee.department || "General"
+                    )
+                );
+
+
+            document.getElementById(
+                "departments"
+            ).textContent =
+                departments.size;
+
+
+            /* TABLE */
+
+            const table =
+                document.getElementById(
+                    "dashboardEmployees"
+                );
+
+
+            if (!employees.length) {
+
+                table.innerHTML = `
+
+                    <tr>
+
+                        <td colspan="8" class="empty">
+
+                            📭 No employees found
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+                return;
+
+            }
+
+
+            table.innerHTML =
+                employees.slice(0, 8).map(employee => {
+
+                    const status =
+                        todayAttendance[employee.id] ||
+                        attendance[employee.id] ||
+                        "Not Marked";
+
+
+                    let statusClass =
+                        "pending";
+
+
+                    if (status === "Present") {
+
+                        statusClass =
+                            "present";
+
+                    }
+
+
+                    if (status === "Absent") {
+
+                        statusClass =
+                            "absent";
+
+                    }
+
+
+                    return `
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+
+                                    ${escapeHtml(
+                                        employee.name
+                                    )}
+
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+
+                                ${employee.age || "—"}
+
+                            </td>
+
+
+                            <td>
+
+                                ${escapeHtml(
+                                    employee.phone
+                                )}
+
+                            </td>
+
+
+                            <td>
+
+                                ${escapeHtml(
+                                    employee.address
+                                )}
+
+                            </td>
+
+
+                            <td>
+
+                                ${escapeHtml(
+                                    employee.department ||
+                                    "General"
+                                )}
+
+                            </td>
+
+
+                            <td>
+
+                                ₹${Number(
+                                    employee.salary || 0
+                                ).toLocaleString("en-IN")}
+
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="status ${statusClass}">
+
+                                    ${escapeHtml(status)}
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                ${escapeHtml(
+                                    employee.company || "—"
+                                )}
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }).join("");
+
+        }
+
+
+        /* =========================================
+           DARK MODE FALLBACK
+        ========================================= */
+
+        function toggleDarkMode() {
+
+            document.body.classList.toggle("dark-mode");
+
+            const dark =
+                document.body.classList.contains(
+                    "dark-mode"
+                );
+
+            localStorage.setItem(
+                "fedexTheme",
+                dark ? "dark" : "light"
+            );
+
+            const button =
+                document.getElementById("darkBtn");
+
+            if (button) {
+
+                button.textContent =
+                    dark
+                        ? "☀️ Light Mode"
+                        : "🌙 Dark Mode";
+
+            }
+
+        }
+
+
+        function loadTheme() {
+
+            const theme =
+                localStorage.getItem(
+                    "fedexTheme"
+                );
+
+            if (theme === "dark") {
+
+                document.body.classList.add(
+                    "dark-mode"
+                );
+
+            }
+
+            const button =
+                document.getElementById("darkBtn");
+
+            if (button) {
+
+                button.textContent =
+                    theme === "dark"
+                        ? "☀️ Light Mode"
+                        : "🌙 Dark Mode";
+
+            }
+
+        }
+
+
+        /* =========================================
+           INITIAL LOAD
+        ========================================= */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                getEmployees();
+
+                renderDashboard();
+
+                loadTheme();
+
+                if (typeof renderActivities === "function") {
+
+                    renderActivities();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================
+           UPDATE WHEN RETURNING TO DASHBOARD
+        ========================================= */
+
+        window.addEventListener(
+            "pageshow",
+            function () {
+
+                renderDashboard();
+
+            }
+        );
+
+
+        window.addEventListener(
+            "storage",
+            function () {
+
+                renderDashboard();
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

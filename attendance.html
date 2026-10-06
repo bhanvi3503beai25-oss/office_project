@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Attendance - FedEx Admin</title>
+
+    <link rel="stylesheet" href="STYLE.CSS">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo">
+        📦 FedEx Admin
+    </div>
+
+    <ul class="menu">
+
+        <li>
+            <a href="INDEX.HTML">🏠 Dashboard</a>
+        </li>
+
+        <li>
+            <a href="employees.html">👥 Employees</a>
+        </li>
+
+        <li>
+            <a href="attendance.html" class="active">
+                📅 Attendance
+            </a>
+        </li>
+
+        <li>
+            <a href="salary.html">💰 Salary</a>
+        </li>
+
+        <li>
+            <a href="reports.html">📊 Reports</a>
+        </li>
+
+        <li>
+            <a href="settings.html">⚙️ Settings</a>
+        </li>
+
+    </ul>
+
+    <button
+        class="dark-btn"
+        id="darkBtn">
+        🌙 Dark Mode
+    </button>
+
+</div>
+
+
+<div class="main">
+
+    <div class="navbar">
+
+        <div>
+
+            <h2>Attendance</h2>
+
+            <p>
+                Manage employee attendance
+            </p>
+
+        </div>
+
+        <div class="nav-right">
+
+            <span id="clock"></span>
+
+            <div class="profile">
+                👤 Admin
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>Attendance Management</h1>
+
+            <p>
+                Mark and track employee attendance.
+            </p>
+
+        </div>
+
+        <div class="btn-row">
+
+            <button
+                class="success"
+                onclick="markAll('Present')">
+
+                🟢 Mark All Present
+
+            </button>
+
+            <button
+                class="danger"
+                onclick="markAll('Absent')">
+
+                🔴 Mark All Absent
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- DATE -->
+
+    <div class="panel">
+
+        <div class="form-row">
+
+            <div class="form-group">
+
+                <label>
+                    Attendance Date
+                </label>
+
+                <input
+                    type="date"
+                    id="attendanceDate"
+                    onchange="renderAttendance()"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Search Employee
+                </label>
+
+                <input
+                    type="text"
+                    id="attendanceSearch"
+                    placeholder="Search employee..."
+                    oninput="renderAttendance()"
+                >
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATS -->
+
+    <div class="cards">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                👥
+            </div>
+
+            <div>
+
+                <h3 id="totalEmployees">
+                    0
+                </h3>
+
+                <p>
+                    Total Employees
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🟢
+            </div>
+
+            <div>
+
+                <h3 id="presentCount">
+                    0
+                </h3>
+
+                <p>
+                    Present
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🔴
+            </div>
+
+            <div>
+
+                <h3 id="absentCount">
+                    0
+                </h3>
+
+                <p>
+                    Absent
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📊
+            </div>
+
+            <div>
+
+                <h3 id="attendanceRate">
+                    0%
+                </h3>
+
+                <p>
+                    Attendance Rate
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ATTENDANCE TABLE -->
+
+    <div class="table-card">
+
+        <div class="table-header">
+
+            <div>
+
+                <h3>
+                    Employee Attendance
+                </h3>
+
+                <p id="selectedDateText">
+                    Attendance
+                </p>
+
+            </div>
+
+            <span id="employeeCount">
+                0 Employees
+            </span>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Employee</th>
+
+                        <th>Department</th>
+
+                        <th>Phone</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="attendanceTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- RECENT ACTIVITY -->
+
+    <div class="panel">
+
+        <div class="table-header">
+
+            <div>
+
+                <h3>
+                    Recent Activity
+                </h3>
+
+                <p>
+                    Latest attendance activities
+                </p>
+
+            </div>
+
+            <button
+                class="danger"
+                onclick="clearActivities()">
+
+                Clear
+
+            </button>
+
+        </div>
+
+        <div id="activityList"></div>
+
+    </div>
+
+</div>
+
+
+<script src="app.js"></script>
+
+
+<script>
+
+const today =
+    new Date().toISOString().split("T")[0];
+
+
+function getEmployees() {
+
+    return JSON.parse(
+        localStorage.getItem("fedexEmployees") || "[]"
+    );
+
+}
+
+
+function getAttendance() {
+
+    return JSON.parse(
+        localStorage.getItem("fedexAttendance") || "{}"
+    );
+
+}
+
+
+function saveAttendance(data) {
+
+    localStorage.setItem(
+        "fedexAttendance",
+        JSON.stringify(data)
+    );
+
+}
+
+
+function getStatus(employeeId, date) {
+
+    const attendance =
+        getAttendance();
+
+    return attendance[date]?.[employeeId] || "Not Marked";
+
+}
+
+
+function renderAttendance() {
+
+    const employees =
+        getEmployees();
+
+    const date =
+        document.getElementById("attendanceDate").value;
+
+    const search =
+        document.getElementById("attendanceSearch")
+            .value
+            .toLowerCase();
+
+
+    const filtered =
+        employees.filter(e =>
+
+            e.name
+                .toLowerCase()
+                .includes(search) ||
+
+            e.phone.includes(search) ||
+
+            e.department
+                .toLowerCase()
+                .includes(search)
+
+        );
+
+
+    document.getElementById("totalEmployees")
+        .textContent = employees.length;
+
+
+    document.getElementById("employeeCount")
+        .textContent =
+        filtered.length + " Employees";
+
+
+    document.getElementById("selectedDateText")
+        .textContent =
+        "Attendance for " +
+        new Date(date + "T00:00:00")
+            .toLocaleDateString("en-IN");
+
+
+    const table =
+        document.getElementById("attendanceTable");
+
+
+    if (!filtered.length) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="6" class="empty">
+                    🔍 No employees found
+                </td>
+            </tr>
+        `;
+
+        updateStats();
+
+        return;
+
+    }
+
+
+    table.innerHTML =
+        filtered.map(e => {
+
+            const status =
+                getStatus(e.id, date);
+
+
+            let statusClass = "pending";
+
+            if (status === "Present") {
+                statusClass = "present";
+            }
+
+            if (status === "Absent") {
+                statusClass = "absent";
+            }
+
+
+            return `
+
+                <tr>
+
+                    <td>
+                        #${e.id}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(e.name)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(e.department)}
+                    </td>
+
+                    <td>
+                        ${e.phone}
+                    </td>
+
+                    <td>
+
+                        <span class="status ${statusClass}">
+                            ${status}
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <div class="btn-row">
+
+                            <button
+                                class="success action-btn"
+                                onclick="setAttendance(${e.id}, 'Present')">
+
+                                ✓ Present
+
+                            </button>
+
+                            <button
+                                class="danger action-btn"
+                                onclick="setAttendance(${e.id}, 'Absent')">
+
+                                ✕ Absent
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+
+
+    updateStats();
+
+}
+
+
+function setAttendance(id, status) {
+
+    const date =
+        document.getElementById("attendanceDate").value;
+
+    const employees =
+        getEmployees();
+
+    const employee =
+        employees.find(e => e.id === id);
+
+    if (!employee) return;
+
+
+    const attendance =
+        getAttendance();
+
+
+    if (!attendance[date]) {
+        attendance[date] = {};
+    }
+
+
+    attendance[date][id] =
+        status;
+
+
+    saveAttendance(attendance);
+
+
+    addActivity(
+        employee.name +
+        " marked " +
+        status +
+        " for " +
+        date,
+        status === "Present"
+            ? "🟢"
+            : "🔴"
+    );
+
+
+    renderAttendance();
+
+    renderActivities();
+
+    showToast(
+        employee.name +
+        " marked " +
+        status
+    );
+
+}
+
+
+function markAll(status) {
+
+    const date =
+        document.getElementById("attendanceDate").value;
+
+    const employees =
+        getEmployees();
+
+
+    if (!employees.length) {
+
+        alert("No employees available.");
+
+        return;
+
+    }
+
+
+    if (
+        !confirm(
+            `Mark all ${employees.length} employees as ${status}?`
+        )
+    ) return;
+
+
+    const attendance =
+        getAttendance();
+
+
+    if (!attendance[date]) {
+        attendance[date] = {};
+    }
+
+
+    employees.forEach(e => {
+
+        attendance[date][e.id] =
+            status;
+
+    });
+
+
+    saveAttendance(attendance);
+
+
+    addActivity(
+        "All employees marked " +
+        status +
+        " for " +
+        date,
+        status === "Present"
+            ? "🟢"
+            : "🔴"
+    );
+
+
+    renderAttendance();
+
+    renderActivities();
+
+    showToast(
+        "All employees marked " + status
+    );
+
+}
+
+
+function updateStats() {
+
+    const employees =
+        getEmployees();
+
+    const date =
+        document.getElementById("attendanceDate").value;
+
+
+    let present = 0;
+    let absent = 0;
+
+
+    employees.forEach(e => {
+
+        const status =
+            getStatus(e.id, date);
+
+        if (status === "Present") {
+            present++;
+        }
+
+        if (status === "Absent") {
+            absent++;
+        }
+
+    });
+
+
+    document.getElementById("presentCount")
+        .textContent = present;
+
+
+    document.getElementById("absentCount")
+        .textContent = absent;
+
+
+    const marked =
+        present + absent;
+
+
+    const rate =
+        marked === 0
+            ? 0
+            : Math.round(
+                (present / marked) * 100
+            );
+
+
+    document.getElementById("attendanceRate")
+        .textContent = rate + "%";
+
+}
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        document.getElementById(
+            "attendanceDate"
+        ).value = today;
+
+
+        renderAttendance();
+
+        renderActivities();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
