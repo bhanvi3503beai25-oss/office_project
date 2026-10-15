@@ -232,7 +232,7 @@
                     <input
                         type="text"
                         id="searchEmployee"
-                        placeholder="Search by name, phone, company..."
+                        placeholder="Search by name, phone, address..."
                         oninput="renderEmployees()">
 
                 </div>
@@ -332,13 +332,12 @@
 
                             <th>Salary</th>
 
-                            <th>Company</th>
-
                             <th>Action</th>
 
                         </tr>
 
                     </thead>
+
 
                     <tbody id="employeeTable">
 
@@ -368,6 +367,7 @@
                     </p>
 
                 </div>
+
 
                 <button
                     class="clear-btn"
@@ -407,6 +407,8 @@
                 id="employeeId">
 
 
+            <!-- NAME + AGE -->
+
             <div class="form-row">
 
                 <div class="form-group">
@@ -441,6 +443,8 @@
             </div>
 
 
+            <!-- PHONE + ADDRESS -->
+
             <div class="form-row">
 
                 <div class="form-group">
@@ -473,6 +477,8 @@
 
             </div>
 
+
+            <!-- DEPARTMENT + SALARY -->
 
             <div class="form-row">
 
@@ -531,19 +537,7 @@
             </div>
 
 
-            <div class="form-group">
-
-                <label>
-                    Company
-                </label>
-
-                <input
-                    type="text"
-                    id="empCompany"
-                    placeholder="Enter company">
-
-            </div>
-
+            <!-- MODAL BUTTONS -->
 
             <div class="modal-actions">
 
@@ -582,9 +576,9 @@
 
     <script>
 
-        /* =========================================
-           DEFAULT EMPLOYEES
-        ========================================= */
+        // =========================================
+        // DEFAULT EMPLOYEES
+        // =========================================
 
         const defaultEmployees = [
 
@@ -595,8 +589,7 @@
                 phone: "9876543210",
                 address: "Delhi",
                 department: "IT",
-                salary: 50000,
-                company: "Amazon"
+                salary: 50000
             },
 
             {
@@ -606,8 +599,7 @@
                 phone: "9898989898",
                 address: "Noida",
                 department: "HR",
-                salary: 45000,
-                company: "TCS"
+                salary: 45000
             },
 
             {
@@ -617,8 +609,7 @@
                 phone: "9811122233",
                 address: "Gurgaon",
                 department: "Finance",
-                salary: 60000,
-                company: "Infosys"
+                salary: 60000
             },
 
             {
@@ -628,16 +619,31 @@
                 phone: "9876500000",
                 address: "Delhi",
                 department: "Operations",
-                salary: 55000,
-                company: "FedEx"
+                salary: 55000
             }
 
         ];
 
 
-        /* =========================================
-           GET EMPLOYEES
-        ========================================= */
+        // =========================================
+        // ESCAPE HTML
+        // =========================================
+
+        function escapeHtml(value) {
+
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        // =========================================
+        // GET EMPLOYEES
+        // =========================================
 
         function getEmployees() {
 
@@ -650,7 +656,19 @@
 
                 if (saved) {
 
-                    return JSON.parse(saved);
+                    const employees =
+                        JSON.parse(saved);
+
+                    // Remove old Company data
+                    // from previously saved employees.
+
+                    employees.forEach(employee => {
+
+                        delete employee.company;
+
+                    });
+
+                    return employees;
 
                 }
 
@@ -674,9 +692,9 @@
         }
 
 
-        /* =========================================
-           SAVE EMPLOYEES
-        ========================================= */
+        // =========================================
+        // SAVE EMPLOYEES
+        // =========================================
 
         function saveEmployees(employees) {
 
@@ -707,9 +725,9 @@
         }
 
 
-        /* =========================================
-           MONEY
-        ========================================= */
+        // =========================================
+        // MONEY
+        // =========================================
 
         function money(value) {
 
@@ -720,9 +738,9 @@
         }
 
 
-        /* =========================================
-           RENDER EMPLOYEES
-        ========================================= */
+        // =========================================
+        // RENDER EMPLOYEES
+        // =========================================
 
         function renderEmployees() {
 
@@ -754,26 +772,23 @@
                             employee.name || ""
                         ).toLowerCase();
 
+
                     const phone =
                         String(
                             employee.phone || ""
                         ).toLowerCase();
 
-                    const company =
-                        String(
-                            employee.company || ""
-                        ).toLowerCase();
 
                     const address =
                         String(
                             employee.address || ""
                         ).toLowerCase();
 
+
                     const matchesSearch =
                         !search ||
                         name.includes(search) ||
                         phone.includes(search) ||
-                        company.includes(search) ||
                         address.includes(search);
 
 
@@ -789,6 +804,8 @@
 
                 });
 
+
+            // Employee count
 
             document.getElementById(
                 "employeeCount"
@@ -807,6 +824,8 @@
                 );
 
 
+            // No employees
+
             if (!filtered.length) {
 
                 table.innerHTML = `
@@ -814,7 +833,7 @@
                     <tr>
 
                         <td
-                            colspan="9"
+                            colspan="8"
                             class="empty">
 
                             📭 No employees found
@@ -829,6 +848,8 @@
 
             }
 
+
+            // Employee rows
 
             table.innerHTML =
                 filtered.map(employee => `
@@ -886,18 +907,13 @@
                         <td>
 
                             <strong>
+
                                 ${money(
                                     employee.salary
                                 )}
+
                             </strong>
 
-                        </td>
-
-
-                        <td>
-                            ${escapeHtml(
-                                employee.company
-                            )}
                         </td>
 
 
@@ -935,9 +951,9 @@
         }
 
 
-        /* =========================================
-           UPDATE STATS
-        ========================================= */
+        // =========================================
+        // UPDATE STATS
+        // =========================================
 
         function updateStats() {
 
@@ -1003,9 +1019,9 @@
         }
 
 
-        /* =========================================
-           OPEN ADD MODAL
-        ========================================= */
+        // =========================================
+        // OPEN ADD MODAL
+        // =========================================
 
         function openEmployeeModal() {
 
@@ -1051,20 +1067,15 @@
 
 
             document.getElementById(
-                "empCompany"
-            ).value = "";
-
-
-            document.getElementById(
                 "employeeModal"
             ).classList.add("show");
 
         }
 
 
-        /* =========================================
-           CLOSE MODAL
-        ========================================= */
+        // =========================================
+        // CLOSE MODAL
+        // =========================================
 
         function closeEmployeeModal() {
 
@@ -1075,9 +1086,9 @@
         }
 
 
-        /* =========================================
-           SAVE EMPLOYEE
-        ========================================= */
+        // =========================================
+        // SAVE EMPLOYEE
+        // =========================================
 
         function saveEmployee() {
 
@@ -1121,12 +1132,6 @@
                 );
 
 
-            const company =
-                document.getElementById(
-                    "empCompany"
-                ).value.trim();
-
-
             const editId =
                 Number(
                     document.getElementById(
@@ -1135,7 +1140,7 @@
                 );
 
 
-            /* ================= VALIDATION ================= */
+            // ================= VALIDATION =================
 
             if (!name) {
 
@@ -1202,24 +1207,11 @@
             }
 
 
-            if (!company) {
-
-                alert(
-                    "Please enter company name."
-                );
-
-                return;
-
-            }
-
-
-            /* ================= GET DATA ================= */
-
             const employees =
                 getEmployees();
 
 
-            /* ================= EDIT ================= */
+            // ================= EDIT =================
 
             if (editId) {
 
@@ -1250,20 +1242,15 @@
                     phone,
                     address,
                     department,
-                    salary,
-                    company
+                    salary
 
                 };
 
 
-                /*
-                    IMPORTANT:
-                    Save FIRST.
-                    Activity comes AFTER save.
-                */
-
                 const saved =
-                    saveEmployees(employees);
+                    saveEmployees(
+                        employees
+                    );
 
 
                 if (!saved) return;
@@ -1275,11 +1262,6 @@
 
                 updateStats();
 
-
-                /*
-                    Activity is optional.
-                    Employee data is already safely saved.
-                */
 
                 try {
 
@@ -1334,7 +1316,7 @@
             }
 
 
-            /* ================= ADD ================= */
+            // ================= ADD =================
 
             const newId =
                 employees.length
@@ -1363,9 +1345,7 @@
 
                 department,
 
-                salary,
-
-                company
+                salary
 
             };
 
@@ -1374,11 +1354,6 @@
                 newEmployee
             );
 
-
-            /*
-                IMPORTANT:
-                SAVE BEFORE ACTIVITY.
-            */
 
             const saved =
                 saveEmployees(
@@ -1389,20 +1364,12 @@
             if (!saved) return;
 
 
-            /*
-                Immediately update UI.
-            */
-
             renderEmployees();
 
             updateStats();
 
             closeEmployeeModal();
 
-
-            /*
-                Activity cannot break save.
-            */
 
             try {
 
@@ -1475,9 +1442,9 @@
         }
 
 
-        /* =========================================
-           EDIT EMPLOYEE
-        ========================================= */
+        // =========================================
+        // EDIT EMPLOYEE
+        // =========================================
 
         function editEmployee(id) {
 
@@ -1548,21 +1515,15 @@
 
 
             document.getElementById(
-                "empCompany"
-            ).value =
-                employee.company || "";
-
-
-            document.getElementById(
                 "employeeModal"
             ).classList.add("show");
 
         }
 
 
-        /* =========================================
-           DELETE EMPLOYEE
-        ========================================= */
+        // =========================================
+        // DELETE EMPLOYEE
+        // =========================================
 
         function deleteEmployee(id) {
 
@@ -1597,10 +1558,6 @@
                         employee.id !== id
                 );
 
-
-            /*
-                SAVE FIRST.
-            */
 
             const saved =
                 saveEmployees(
@@ -1667,9 +1624,9 @@
         }
 
 
-        /* =========================================
-           MODAL OUTSIDE CLICK
-        ========================================= */
+        // =========================================
+        // MODAL OUTSIDE CLICK
+        // =========================================
 
         document.addEventListener(
             "click",
@@ -1693,9 +1650,9 @@
         );
 
 
-        /* =========================================
-           ESCAPE CLOSE
-        ========================================= */
+        // =========================================
+        // ESCAPE CLOSE
+        // =========================================
 
         document.addEventListener(
             "keydown",
@@ -1713,18 +1670,13 @@
         );
 
 
-        /* =========================================
-           INITIAL LOAD
-        ========================================= */
+        // =========================================
+        // INITIAL LOAD
+        // =========================================
 
         document.addEventListener(
             "DOMContentLoaded",
             function () {
-
-                /*
-                    Create default data only
-                    if it doesn't already exist.
-                */
 
                 if (
                     !localStorage.getItem(

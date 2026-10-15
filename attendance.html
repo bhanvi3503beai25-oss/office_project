@@ -14,732 +14,1812 @@
 
     <link rel="stylesheet" href="STYLE.CSS">
 
+    <style>
+
+        /* =========================================
+           MONTH ATTENDANCE TABLE
+        ========================================= */
+
+        .attendance-month-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+
+        .month-attendance-table {
+            width: max-content;
+            min-width: 100%;
+            border-collapse: collapse;
+        }
+
+
+        .month-attendance-table th,
+        .month-attendance-table td {
+            text-align: center;
+            padding: 10px 8px;
+            white-space: nowrap;
+        }
+
+
+        .month-attendance-table th {
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            background: #1769d5;
+            color: white;
+        }
+
+
+        .employee-fixed {
+            position: sticky;
+            left: 0;
+            z-index: 4;
+            background: #17233a !important;
+            color: white;
+            min-width: 160px;
+            text-align: left !important;
+        }
+
+
+        .summary-fixed {
+            position: sticky;
+            right: 0;
+            z-index: 4;
+            background: #17233a !important;
+            color: white;
+        }
+
+
+        .attendance-cell {
+            cursor: pointer;
+            min-width: 42px;
+            height: 42px;
+            font-weight: bold;
+            border-radius: 6px;
+            user-select: none;
+        }
+
+
+        .attendance-cell:hover {
+            transform: scale(1.05);
+        }
+
+
+        .attendance-cell.present {
+            background: #20b978;
+            color: white;
+        }
+
+
+        .attendance-cell.absent {
+            background: #ef4444;
+            color: white;
+        }
+
+
+        .attendance-cell.not-marked {
+            background: #3b465b;
+            color: #cbd5e1;
+        }
+
+
+        .employee-name-cell {
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background: #17233a;
+            color: white;
+            text-align: left !important;
+        }
+
+
+        .summary-cell {
+            position: sticky;
+            right: 0;
+            z-index: 2;
+            background: #17233a;
+            color: white;
+            font-weight: bold;
+        }
+
+
+        .present-number {
+            color: #20d889;
+        }
+
+
+        .absent-number {
+            color: #ff6666;
+        }
+
+
+        .month-help {
+            margin-top: 10px;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+
+        .legend {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+
+        .legend span {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+
+        .legend-box {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+
+        .legend-present {
+            background: #20b978;
+        }
+
+
+        .legend-absent {
+            background: #ef4444;
+        }
+
+
+        .legend-none {
+            background: #3b465b;
+        }
+
+
+        .today-header {
+            background: #0f57b7 !important;
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<div class="sidebar">
 
-    <div class="logo">
-        📦 FedEx Admin
-    </div>
+    <!-- =========================================
+         SIDEBAR
+    ========================================= -->
 
-    <ul class="menu">
+    <div class="sidebar">
 
-        <li>
-            <a href="INDEX.HTML">🏠 Dashboard</a>
-        </li>
-
-        <li>
-            <a href="employees.html">👥 Employees</a>
-        </li>
-
-        <li>
-            <a href="attendance.html" class="active">
-                📅 Attendance
-            </a>
-        </li>
-
-        <li>
-            <a href="salary.html">💰 Salary</a>
-        </li>
-
-        <li>
-            <a href="reports.html">📊 Reports</a>
-        </li>
-
-        <li>
-            <a href="settings.html">⚙️ Settings</a>
-        </li>
-
-    </ul>
-
-    <button
-        class="dark-btn"
-        id="darkBtn">
-        🌙 Dark Mode
-    </button>
-
-</div>
-
-
-<div class="main">
-
-    <div class="navbar">
-
-        <div>
-
-            <h2>Attendance</h2>
-
-            <p>
-                Manage employee attendance
-            </p>
-
+        <div class="logo">
+            📦 FedEx Admin
         </div>
 
-        <div class="nav-right">
 
-            <span id="clock"></span>
+        <ul class="menu">
 
-            <div class="profile">
-                👤 Admin
-            </div>
-
-        </div>
-
-    </div>
+            <li>
+                <a href="INDEX.HTML">
+                    🏠 Dashboard
+                </a>
+            </li>
 
 
-    <div class="page-header">
-
-        <div>
-
-            <h1>Attendance Management</h1>
-
-            <p>
-                Mark and track employee attendance.
-            </p>
-
-        </div>
-
-        <div class="btn-row">
-
-            <button
-                class="success"
-                onclick="markAll('Present')">
-
-                🟢 Mark All Present
-
-            </button>
-
-            <button
-                class="danger"
-                onclick="markAll('Absent')">
-
-                🔴 Mark All Absent
-
-            </button>
-
-        </div>
-
-    </div>
+            <li>
+                <a href="employees.html">
+                    👥 Employees
+                </a>
+            </li>
 
 
-    <!-- DATE -->
-
-    <div class="panel">
-
-        <div class="form-row">
-
-            <div class="form-group">
-
-                <label>
-                    Attendance Date
-                </label>
-
-                <input
-                    type="date"
-                    id="attendanceDate"
-                    onchange="renderAttendance()"
+            <li>
+                <a
+                    href="attendance.html"
+                    class="active"
                 >
-
-            </div>
-
-            <div class="form-group">
-
-                <label>
-                    Search Employee
-                </label>
-
-                <input
-                    type="text"
-                    id="attendanceSearch"
-                    placeholder="Search employee..."
-                    oninput="renderAttendance()"
-                >
-
-            </div>
-
-        </div>
-
-    </div>
+                    📅 Attendance
+                </a>
+            </li>
 
 
-    <!-- STATS -->
-
-    <div class="cards">
-
-        <div class="stat-card">
-
-            <div class="stat-icon">
-                👥
-            </div>
-
-            <div>
-
-                <h3 id="totalEmployees">
-                    0
-                </h3>
-
-                <p>
-                    Total Employees
-                </p>
-
-            </div>
-
-        </div>
+            <li>
+                <a href="salary.html">
+                    💰 Salary
+                </a>
+            </li>
 
 
-        <div class="stat-card">
-
-            <div class="stat-icon">
-                🟢
-            </div>
-
-            <div>
-
-                <h3 id="presentCount">
-                    0
-                </h3>
-
-                <p>
-                    Present
-                </p>
-
-            </div>
-
-        </div>
+            <li>
+                <a href="reports.html">
+                    📊 Reports
+                </a>
+            </li>
 
 
-        <div class="stat-card">
+            <li>
+                <a href="settings.html">
+                    ⚙️ Settings
+                </a>
+            </li>
 
-            <div class="stat-icon">
-                🔴
-            </div>
-
-            <div>
-
-                <h3 id="absentCount">
-                    0
-                </h3>
-
-                <p>
-                    Absent
-                </p>
-
-            </div>
-
-        </div>
+        </ul>
 
 
-        <div class="stat-card">
-
-            <div class="stat-icon">
-                📊
-            </div>
-
-            <div>
-
-                <h3 id="attendanceRate">
-                    0%
-                </h3>
-
-                <p>
-                    Attendance Rate
-                </p>
-
-            </div>
-
-        </div>
+        <button
+            class="dark-btn"
+            id="darkBtn"
+        >
+            🌙 Dark Mode
+        </button>
 
     </div>
 
 
-    <!-- ATTENDANCE TABLE -->
 
-    <div class="table-card">
+    <!-- =========================================
+         MAIN
+    ========================================= -->
 
-        <div class="table-header">
+    <div class="main">
+
+
+        <!-- NAVBAR -->
+
+        <div class="navbar">
 
             <div>
 
-                <h3>
-                    Employee Attendance
-                </h3>
-
-                <p id="selectedDateText">
+                <h2>
                     Attendance
+                </h2>
+
+                <p>
+                    Manage employee attendance
                 </p>
 
             </div>
 
-            <span id="employeeCount">
-                0 Employees
-            </span>
+
+            <div class="nav-right">
+
+                <span id="clock"></span>
+
+
+                <div class="profile">
+                    👤 Admin
+                </div>
+
+            </div>
 
         </div>
 
 
-        <div class="table-wrapper">
 
-            <table>
+        <!-- =========================================
+             PAGE HEADER
+        ========================================= -->
 
-                <thead>
-
-                    <tr>
-
-                        <th>ID</th>
-
-                        <th>Employee</th>
-
-                        <th>Department</th>
-
-                        <th>Phone</th>
-
-                        <th>Status</th>
-
-                        <th>Action</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody id="attendanceTable"></tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-    <!-- RECENT ACTIVITY -->
-
-    <div class="panel">
-
-        <div class="table-header">
+        <div class="page-header">
 
             <div>
 
-                <h3>
-                    Recent Activity
-                </h3>
+                <h1>
+                    Attendance Management
+                </h1>
 
                 <p>
-                    Latest attendance activities
+                    Track employee attendance month-wise.
                 </p>
 
             </div>
 
-            <button
-                class="danger"
-                onclick="clearActivities()">
 
-                Clear
+            <div class="btn-row">
 
-            </button>
+                <button
+                    class="success"
+                    onclick="markAllMonth('Present')"
+                >
+
+                    🟢 Mark All Present
+
+                </button>
+
+
+                <button
+                    class="danger"
+                    onclick="markAllMonth('Absent')"
+                >
+
+                    🔴 Mark All Absent
+
+                </button>
+
+            </div>
 
         </div>
 
-        <div id="activityList"></div>
+
+
+        <!-- =========================================
+             MONTH + SEARCH
+        ========================================= -->
+
+        <div class="panel">
+
+            <div class="form-row">
+
+
+                <!-- MONTH -->
+
+                <div class="form-group">
+
+                    <label>
+                        Attendance Month
+                    </label>
+
+
+                    <input
+                        type="month"
+                        id="attendanceMonth"
+                        onchange="renderAttendance()"
+                    >
+
+                </div>
+
+
+
+                <!-- SEARCH -->
+
+                <div class="form-group">
+
+                    <label>
+                        Search Employee
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="attendanceSearch"
+                        placeholder="Search employee..."
+                        oninput="renderAttendance()"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <div class="month-help">
+
+                💡 Click any attendance cell to change:
+                <b>P</b> → Present,
+                <b>A</b> → Absent,
+                <b>-</b> → Not Marked.
+
+            </div>
+
+
+            <div class="legend">
+
+                <span>
+
+                    <span class="legend-box legend-present"></span>
+
+                    Present
+
+                </span>
+
+
+                <span>
+
+                    <span class="legend-box legend-absent"></span>
+
+                    Absent
+
+                </span>
+
+
+                <span>
+
+                    <span class="legend-box legend-none"></span>
+
+                    Not Marked
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================================
+             MONTH STATS
+        ========================================= -->
+
+        <div class="cards">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👥
+                </div>
+
+
+                <div>
+
+                    <h3 id="totalEmployees">
+                        0
+                    </h3>
+
+                    <p>
+                        Total Employees
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🟢
+                </div>
+
+
+                <div>
+
+                    <h3 id="presentCount">
+                        0
+                    </h3>
+
+                    <p>
+                        Present Days
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🔴
+                </div>
+
+
+                <div>
+
+                    <h3 id="absentCount">
+                        0
+                    </h3>
+
+                    <p>
+                        Absent Days
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📊
+                </div>
+
+
+                <div>
+
+                    <h3 id="attendanceRate">
+                        0%
+                    </h3>
+
+                    <p>
+                        Attendance Rate
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================================
+             MONTH ATTENDANCE TABLE
+        ========================================= -->
+
+        <div class="table-card">
+
+
+            <div class="table-header">
+
+                <div>
+
+                    <h3>
+                        Monthly Employee Attendance
+                    </h3>
+
+
+                    <p id="selectedMonthText">
+                        Attendance
+                    </p>
+
+                </div>
+
+
+                <span id="employeeCount">
+                    0 Employees
+                </span>
+
+            </div>
+
+
+
+            <div class="attendance-month-wrapper">
+
+                <table
+                    class="month-attendance-table"
+                >
+
+                    <thead id="attendanceHead">
+
+                    </thead>
+
+
+                    <tbody
+                        id="attendanceTable"
+                    >
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================================
+             RECENT ACTIVITY
+        ========================================= -->
+
+        <div class="panel">
+
+            <div class="table-header">
+
+                <div>
+
+                    <h3>
+                        Recent Activity
+                    </h3>
+
+
+                    <p>
+                        Latest attendance activities
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="danger"
+                    onclick="clearActivities()"
+                >
+
+                    Clear
+
+                </button>
+
+            </div>
+
+
+            <div id="activityList">
+
+            </div>
+
+        </div>
+
 
     </div>
 
-</div>
 
 
-<script src="app.js"></script>
+    <!-- =========================================
+         COMMON JS
+    ========================================= -->
+
+    <script src="app.js"></script>
 
 
-<script>
 
-const today =
-    new Date().toISOString().split("T")[0];
+    <!-- =========================================
+         ATTENDANCE JS
+    ========================================= -->
 
-
-function getEmployees() {
-
-    return JSON.parse(
-        localStorage.getItem("fedexEmployees") || "[]"
-    );
-
-}
+    <script>
 
 
-function getAttendance() {
+        // =========================================
+        // GET TODAY
+        // =========================================
 
-    return JSON.parse(
-        localStorage.getItem("fedexAttendance") || "{}"
-    );
+        function getToday() {
 
-}
+            const now = new Date();
 
+            const year =
+                now.getFullYear();
 
-function saveAttendance(data) {
+            const month =
+                String(
+                    now.getMonth() + 1
+                ).padStart(2, "0");
 
-    localStorage.setItem(
-        "fedexAttendance",
-        JSON.stringify(data)
-    );
-
-}
-
-
-function getStatus(employeeId, date) {
-
-    const attendance =
-        getAttendance();
-
-    return attendance[date]?.[employeeId] || "Not Marked";
-
-}
+            const day =
+                String(
+                    now.getDate()
+                ).padStart(2, "0");
 
 
-function renderAttendance() {
+            return (
+                year +
+                "-" +
+                month +
+                "-" +
+                day
+            );
 
-    const employees =
-        getEmployees();
-
-    const date =
-        document.getElementById("attendanceDate").value;
-
-    const search =
-        document.getElementById("attendanceSearch")
-            .value
-            .toLowerCase();
+        }
 
 
-    const filtered =
-        employees.filter(e =>
 
-            e.name
-                .toLowerCase()
-                .includes(search) ||
+        // =========================================
+        // GET CURRENT MONTH
+        // =========================================
 
-            e.phone.includes(search) ||
+        function getCurrentMonth() {
 
-            e.department
-                .toLowerCase()
-                .includes(search)
+            return getToday().substring(
+                0,
+                7
+            );
 
-        );
-
-
-    document.getElementById("totalEmployees")
-        .textContent = employees.length;
+        }
 
 
-    document.getElementById("employeeCount")
-        .textContent =
-        filtered.length + " Employees";
+
+        // =========================================
+        // GET NUMBER OF DAYS IN MONTH
+        // =========================================
+
+        function getDaysInMonth(monthValue) {
+
+            const parts =
+                monthValue.split("-");
 
 
-    document.getElementById("selectedDateText")
-        .textContent =
-        "Attendance for " +
-        new Date(date + "T00:00:00")
-            .toLocaleDateString("en-IN");
+            const year =
+                Number(parts[0]);
 
 
-    const table =
-        document.getElementById("attendanceTable");
+            const month =
+                Number(parts[1]);
 
 
-    if (!filtered.length) {
+            return new Date(
+                year,
+                month,
+                0
+            ).getDate();
 
-        table.innerHTML = `
-            <tr>
-                <td colspan="6" class="empty">
-                    🔍 No employees found
-                </td>
-            </tr>
-        `;
-
-        updateStats();
-
-        return;
-
-    }
+        }
 
 
-    table.innerHTML =
-        filtered.map(e => {
 
-            const status =
-                getStatus(e.id, date);
+        // =========================================
+        // GET EMPLOYEES
+        // =========================================
+
+        function getEmployees() {
+
+            try {
+
+                const saved =
+                    localStorage.getItem(
+                        "fedexEmployees"
+                    );
 
 
-            let statusClass = "pending";
+                if (!saved) {
 
-            if (status === "Present") {
-                statusClass = "present";
+                    return [];
+
+                }
+
+
+                const employees =
+                    JSON.parse(saved);
+
+
+                if (
+                    !Array.isArray(employees)
+                ) {
+
+                    return [];
+
+                }
+
+
+                return employees;
+
             }
 
-            if (status === "Absent") {
-                statusClass = "absent";
+            catch (error) {
+
+                console.error(
+                    "Employee data error:",
+                    error
+                );
+
+                return [];
+
+            }
+
+        }
+
+
+
+        // =========================================
+        // ESCAPE HTML
+        // =========================================
+
+        function escapeHtml(value) {
+
+            return String(
+                value ?? ""
+            )
+
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+
+            .replace(
+                /</g,
+                "&lt;"
+            )
+
+            .replace(
+                />/g,
+                "&gt;"
+            )
+
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+        }
+
+
+
+        // =========================================
+        // GET ATTENDANCE
+        // =========================================
+
+        function getAttendance() {
+
+            try {
+
+                const saved =
+                    localStorage.getItem(
+                        "fedexAttendance"
+                    );
+
+
+                if (!saved) {
+
+                    return {};
+
+                }
+
+
+                const data =
+                    JSON.parse(saved);
+
+
+                if (
+                    typeof data !== "object" ||
+                    data === null
+                ) {
+
+                    return {};
+
+                }
+
+
+                return data;
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Attendance data error:",
+                    error
+                );
+
+                return {};
+
+            }
+
+        }
+
+
+
+        // =========================================
+        // SAVE ATTENDANCE
+        // =========================================
+
+        function saveAttendance(data) {
+
+            try {
+
+                localStorage.setItem(
+                    "fedexAttendance",
+                    JSON.stringify(data)
+                );
+
+                return true;
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Attendance save error:",
+                    error
+                );
+
+                alert(
+                    "Attendance could not be saved."
+                );
+
+                return false;
+
+            }
+
+        }
+
+
+
+        // =========================================
+        // GET STATUS
+        // =========================================
+
+        function getStatus(
+            employeeId,
+            date
+        ) {
+
+            const attendance =
+                getAttendance();
+
+
+            return (
+                attendance[date]?.[employeeId]
+                ||
+                "Not Marked"
+            );
+
+        }
+
+
+
+        // =========================================
+        // SET ATTENDANCE
+        // =========================================
+
+        function setAttendance(
+            employeeId,
+            date,
+            status
+        ) {
+
+
+            const employees =
+                getEmployees();
+
+
+            const employee =
+                employees.find(
+                    e =>
+                        Number(e.id) ===
+                        Number(employeeId)
+                );
+
+
+            if (!employee) {
+
+                return;
+
             }
 
 
-            return `
+            const attendance =
+                getAttendance();
+
+
+            if (!attendance[date]) {
+
+                attendance[date] = {};
+
+            }
+
+
+            // Same status click = remove it
+
+            if (
+                attendance[date][employeeId] ===
+                status
+            ) {
+
+                delete attendance[date][
+                    employeeId
+                ];
+
+            }
+
+            else {
+
+                attendance[date][employeeId] =
+                    status;
+
+            }
+
+
+            saveAttendance(
+                attendance
+            );
+
+
+            // Activity
+
+            try {
+
+                if (
+                    typeof addActivity ===
+                    "function"
+                ) {
+
+                    addActivity(
+
+                        employee.name +
+                        " marked " +
+                        status +
+                        " for " +
+                        date,
+
+                        status === "Present"
+                            ? "🟢"
+                            : "🔴"
+
+                    );
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Activity error:",
+                    error
+                );
+
+            }
+
+
+            renderAttendance();
+
+
+            try {
+
+                if (
+                    typeof renderActivities ===
+                    "function"
+                ) {
+
+                    renderActivities();
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Activity render error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+
+        // =========================================
+        // CREATE DATE
+        // =========================================
+
+        function createDate(
+            monthValue,
+            day
+        ) {
+
+            return (
+                monthValue +
+                "-" +
+                String(day).padStart(2, "0")
+            );
+
+        }
+
+
+
+        // =========================================
+        // RENDER TABLE HEADER
+        // =========================================
+
+        function renderHeader(
+            daysInMonth
+        ) {
+
+
+            const head =
+                document.getElementById(
+                    "attendanceHead"
+                );
+
+
+            let html = `
 
                 <tr>
 
-                    <td>
-                        #${e.id}
-                    </td>
+                    <th class="employee-fixed">
+                        Employee
+                    </th>
 
-                    <td>
-                        <strong>
-                            ${escapeHtml(e.name)}
-                        </strong>
-                    </td>
+            `;
 
-                    <td>
-                        ${escapeHtml(e.department)}
-                    </td>
 
-                    <td>
-                        ${e.phone}
-                    </td>
+            for (
+                let day = 1;
+                day <= daysInMonth;
+                day++
+            ) {
 
-                    <td>
+                html += `
 
-                        <span class="status ${statusClass}">
-                            ${status}
-                        </span>
+                    <th>
+                        ${day}
+                    </th>
 
-                    </td>
+                `;
 
-                    <td>
+            }
 
-                        <div class="btn-row">
 
-                            <button
-                                class="success action-btn"
-                                onclick="setAttendance(${e.id}, 'Present')">
+            html += `
 
-                                ✓ Present
+                    <th>
+                        Present
+                    </th>
 
-                            </button>
-
-                            <button
-                                class="danger action-btn"
-                                onclick="setAttendance(${e.id}, 'Absent')">
-
-                                ✕ Absent
-
-                            </button>
-
-                        </div>
-
-                    </td>
+                    <th>
+                        Absent
+                    </th>
 
                 </tr>
 
             `;
 
-        }).join("");
 
+            head.innerHTML =
+                html;
 
-    updateStats();
-
-}
-
-
-function setAttendance(id, status) {
-
-    const date =
-        document.getElementById("attendanceDate").value;
-
-    const employees =
-        getEmployees();
-
-    const employee =
-        employees.find(e => e.id === id);
-
-    if (!employee) return;
-
-
-    const attendance =
-        getAttendance();
-
-
-    if (!attendance[date]) {
-        attendance[date] = {};
-    }
-
-
-    attendance[date][id] =
-        status;
-
-
-    saveAttendance(attendance);
-
-
-    addActivity(
-        employee.name +
-        " marked " +
-        status +
-        " for " +
-        date,
-        status === "Present"
-            ? "🟢"
-            : "🔴"
-    );
-
-
-    renderAttendance();
-
-    renderActivities();
-
-    showToast(
-        employee.name +
-        " marked " +
-        status
-    );
-
-}
-
-
-function markAll(status) {
-
-    const date =
-        document.getElementById("attendanceDate").value;
-
-    const employees =
-        getEmployees();
-
-
-    if (!employees.length) {
-
-        alert("No employees available.");
-
-        return;
-
-    }
-
-
-    if (
-        !confirm(
-            `Mark all ${employees.length} employees as ${status}?`
-        )
-    ) return;
-
-
-    const attendance =
-        getAttendance();
-
-
-    if (!attendance[date]) {
-        attendance[date] = {};
-    }
-
-
-    employees.forEach(e => {
-
-        attendance[date][e.id] =
-            status;
-
-    });
-
-
-    saveAttendance(attendance);
-
-
-    addActivity(
-        "All employees marked " +
-        status +
-        " for " +
-        date,
-        status === "Present"
-            ? "🟢"
-            : "🔴"
-    );
-
-
-    renderAttendance();
-
-    renderActivities();
-
-    showToast(
-        "All employees marked " + status
-    );
-
-}
-
-
-function updateStats() {
-
-    const employees =
-        getEmployees();
-
-    const date =
-        document.getElementById("attendanceDate").value;
-
-
-    let present = 0;
-    let absent = 0;
-
-
-    employees.forEach(e => {
-
-        const status =
-            getStatus(e.id, date);
-
-        if (status === "Present") {
-            present++;
         }
 
-        if (status === "Absent") {
-            absent++;
-        }
-
-    });
 
 
-    document.getElementById("presentCount")
-        .textContent = present;
+        // =========================================
+        // RENDER ATTENDANCE
+        // =========================================
+
+        function renderAttendance() {
 
 
-    document.getElementById("absentCount")
-        .textContent = absent;
+            const monthInput =
+                document.getElementById(
+                    "attendanceMonth"
+                );
 
 
-    const marked =
-        present + absent;
+            const searchInput =
+                document.getElementById(
+                    "attendanceSearch"
+                );
 
 
-    const rate =
-        marked === 0
-            ? 0
-            : Math.round(
-                (present / marked) * 100
+            const month =
+                monthInput.value ||
+                getCurrentMonth();
+
+
+            const search =
+                (
+                    searchInput.value ||
+                    ""
+                )
+                .trim()
+                .toLowerCase();
+
+
+            const employees =
+                getEmployees();
+
+
+            const filtered =
+                employees.filter(
+                    employee => {
+
+
+                        const name =
+                            String(
+                                employee.name || ""
+                            )
+                            .toLowerCase();
+
+
+                        const phone =
+                            String(
+                                employee.phone || ""
+                            )
+                            .toLowerCase();
+
+
+                        const department =
+                            String(
+                                employee.department || ""
+                            )
+                            .toLowerCase();
+
+
+                        return (
+                            !search ||
+                            name.includes(search) ||
+                            phone.includes(search) ||
+                            department.includes(search)
+                        );
+
+                    }
+                );
+
+
+            const daysInMonth =
+                getDaysInMonth(
+                    month
+                );
+
+
+            // Header
+
+            renderHeader(
+                daysInMonth
             );
 
 
-    document.getElementById("attendanceRate")
-        .textContent = rate + "%";
+            // Month text
 
-}
-
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        document.getElementById(
-            "attendanceDate"
-        ).value = today;
+            const monthDate =
+                new Date(
+                    month + "-01T00:00:00"
+                );
 
 
-        renderAttendance();
+            document.getElementById(
+                "selectedMonthText"
+            ).textContent =
+                monthDate.toLocaleDateString(
+                    "en-IN",
+                    {
+                        month: "long",
+                        year: "numeric"
+                    }
+                ) +
+                " Attendance";
 
-        renderActivities();
 
-    }
-);
+            // Employee count
 
-</script>
+            document.getElementById(
+                "employeeCount"
+            ).textContent =
+                filtered.length +
+                (
+                    filtered.length === 1
+                        ? " Employee"
+                        : " Employees"
+                );
+
+
+            const table =
+                document.getElementById(
+                    "attendanceTable"
+                );
+
+
+            if (!filtered.length) {
+
+                table.innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="${daysInMonth + 3}"
+                            class="empty"
+                        >
+
+                            🔍 No employees found
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+
+                updateStats(
+                    month
+                );
+
+                return;
+
+            }
+
+
+
+            // =====================================
+            // EMPLOYEE ROWS
+            // =====================================
+
+            let html = "";
+
+
+            filtered.forEach(
+                employee => {
+
+
+                    let present = 0;
+
+                    let absent = 0;
+
+
+                    html += `
+
+                        <tr>
+
+                            <td class="employee-name-cell">
+
+                                <strong>
+                                    ${escapeHtml(
+                                        employee.name
+                                    )}
+                                </strong>
+
+                                <br>
+
+                                <small>
+                                    ${escapeHtml(
+                                        employee.department
+                                    )}
+                                </small>
+
+                            </td>
+
+                    `;
+
+
+
+                    // Days
+
+                    for (
+                        let day = 1;
+                        day <= daysInMonth;
+                        day++
+                    ) {
+
+
+                        const date =
+                            createDate(
+                                month,
+                                day
+                            );
+
+
+                        const status =
+                            getStatus(
+                                employee.id,
+                                date
+                            );
+
+
+                        let className =
+                            "not-marked";
+
+
+                        let display =
+                            "-";
+
+
+                        if (
+                            status === "Present"
+                        ) {
+
+                            className =
+                                "present";
+
+                            display =
+                                "P";
+
+                            present++;
+
+                        }
+
+
+                        else if (
+                            status === "Absent"
+                        ) {
+
+                            className =
+                                "absent";
+
+                            display =
+                                "A";
+
+                            absent++;
+
+                        }
+
+
+                        html += `
+
+                            <td>
+
+                                <div
+                                    class="attendance-cell ${className}"
+                                    title="${date} - ${status}"
+                                    onclick="setAttendance(
+                                        ${employee.id},
+                                        '${date}',
+                                        '${status === "Present"
+                                            ? "Absent"
+                                            : "Present"}'
+                                    )"
+                                >
+
+                                    ${display}
+
+                                </div>
+
+                            </td>
+
+                        `;
+
+                    }
+
+
+
+                    // Present total
+
+                    html += `
+
+                        <td class="summary-cell">
+
+                            <span class="present-number">
+                                ${present}
+                            </span>
+
+                        </td>
+
+
+                        <td class="summary-cell">
+
+                            <span class="absent-number">
+                                ${absent}
+                            </span>
+
+                        </td>
+
+                    `;
+
+
+                    html += `
+
+                        </tr>
+
+                    `;
+
+                }
+            );
+
+
+            table.innerHTML =
+                html;
+
+
+            updateStats(
+                month
+            );
+
+        }
+
+
+
+        // =========================================
+        // UPDATE MONTH STATS
+        // =========================================
+
+        function updateStats(
+            month
+        ) {
+
+
+            const employees =
+                getEmployees();
+
+
+            const daysInMonth =
+                getDaysInMonth(
+                    month
+                );
+
+
+            let present = 0;
+
+            let absent = 0;
+
+
+            employees.forEach(
+                employee => {
+
+
+                    for (
+                        let day = 1;
+                        day <= daysInMonth;
+                        day++
+                    ) {
+
+
+                        const date =
+                            createDate(
+                                month,
+                                day
+                            );
+
+
+                        const status =
+                            getStatus(
+                                employee.id,
+                                date
+                            );
+
+
+                        if (
+                            status === "Present"
+                        ) {
+
+                            present++;
+
+                        }
+
+
+                        if (
+                            status === "Absent"
+                        ) {
+
+                            absent++;
+
+                        }
+
+                    }
+
+                }
+            );
+
+
+            document.getElementById(
+                "totalEmployees"
+            ).textContent =
+                employees.length;
+
+
+            document.getElementById(
+                "presentCount"
+            ).textContent =
+                present;
+
+
+            document.getElementById(
+                "absentCount"
+            ).textContent =
+                absent;
+
+
+            const marked =
+                present + absent;
+
+
+            const rate =
+                marked === 0
+                    ? 0
+                    : Math.round(
+                        (
+                            present /
+                            marked
+                        ) * 100
+                    );
+
+
+            document.getElementById(
+                "attendanceRate"
+            ).textContent =
+                rate + "%";
+
+        }
+
+
+
+        // =========================================
+        // MARK ALL FOR MONTH
+        // =========================================
+
+        function markAllMonth(
+            status
+        ) {
+
+
+            const month =
+                document.getElementById(
+                    "attendanceMonth"
+                ).value;
+
+
+            if (!month) {
+
+                return;
+
+            }
+
+
+            const employees =
+                getEmployees();
+
+
+            if (!employees.length) {
+
+                alert(
+                    "No employees available."
+                );
+
+                return;
+
+            }
+
+
+            const daysInMonth =
+                getDaysInMonth(
+                    month
+                );
+
+
+            const confirmed =
+                confirm(
+                    `Mark all ${employees.length} employees as ${status} for the entire selected month?`
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            const attendance =
+                getAttendance();
+
+
+            employees.forEach(
+                employee => {
+
+
+                    for (
+                        let day = 1;
+                        day <= daysInMonth;
+                        day++
+                    ) {
+
+
+                        const date =
+                            createDate(
+                                month,
+                                day
+                            );
+
+
+                        if (!attendance[date]) {
+
+                            attendance[date] = {};
+
+                        }
+
+
+                        attendance[date][
+                            employee.id
+                        ] = status;
+
+                    }
+
+                }
+            );
+
+
+            saveAttendance(
+                attendance
+            );
+
+
+            try {
+
+                if (
+                    typeof addActivity ===
+                    "function"
+                ) {
+
+                    addActivity(
+
+                        "All employees marked " +
+                        status +
+                        " for " +
+                        month,
+
+                        status === "Present"
+                            ? "🟢"
+                            : "🔴"
+
+                    );
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Activity error:",
+                    error
+                );
+
+            }
+
+
+            renderAttendance();
+
+
+            try {
+
+                if (
+                    typeof renderActivities ===
+                    "function"
+                ) {
+
+                    renderActivities();
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Activity render error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+
+        // =========================================
+        // INITIAL LOAD
+        // =========================================
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+
+                const monthInput =
+                    document.getElementById(
+                        "attendanceMonth"
+                    );
+
+
+                monthInput.value =
+                    getCurrentMonth();
+
+
+                renderAttendance();
+
+
+                try {
+
+                    if (
+                        typeof renderActivities ===
+                        "function"
+                    ) {
+
+                        renderActivities();
+
+                    }
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Activity load error:",
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+
+    </script>
+
 
 </body>
+
 </html>
