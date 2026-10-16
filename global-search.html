@@ -1,0 +1,694 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FedEx | Admin Portal</title>
+
+<style>
+:root {
+    --purple: #4d148c;
+    --orange: #ff6600;
+    --bg: #f5f6fa;
+    --text: #25233a;
+    --muted: #74778b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+    width: 245px;
+    background: #fff;
+    padding: 27px 16px;
+    border-right: 1px solid #e9e7ef;
+    flex-shrink: 0;
+}
+
+.brand {
+    font-size: 29px;
+    font-weight: 900;
+    letter-spacing: -1.5px;
+    padding: 0 13px 8px;
+}
+
+.brand span { color: var(--purple); }
+.brand b { color: var(--orange); }
+
+.brand-sub {
+    font-size: 11px;
+    color: var(--muted);
+    padding: 0 14px 28px;
+    letter-spacing: 1.5px;
+}
+
+.nav-label {
+    color: #9b99a9;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 15px 13px 10px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 13px;
+    margin: 3px 0;
+    color: #56546b;
+    text-decoration: none;
+    border-radius: 9px;
+    font-size: 13px;
+    transition: .2s;
+}
+
+.nav-link:hover, .nav-link.active {
+    background: #f0e8fb;
+    color: var(--purple);
+    font-weight: 650;
+}
+
+.main { flex: 1; min-width: 0; }
+
+.topbar {
+    background: #fff;
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 32px;
+    border-bottom: 1px solid #e9e7ef;
+}
+
+.topbar-title { font-size: 14px; font-weight: 650; }
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.avatar {
+    background: var(--purple);
+    color: white;
+    border-radius: 50%;
+    width: 37px;
+    height: 37px;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+}
+
+.content { padding: 30px 32px; max-width: 1450px; margin: auto; }
+
+.eyebrow {
+    color: var(--purple);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+h1 { font-size: 29px; margin: 9px 0; letter-spacing: -.7px; }
+
+.subtitle { color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+.hero {
+    margin-top: 25px;
+    padding: 31px;
+    border-radius: 16px;
+    color: white;
+    background: linear-gradient(115deg, #351064, #4d148c 65%, #6936a5);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: "F";
+    position: absolute;
+    right: 35px;
+    top: -60px;
+    font-size: 240px;
+    font-weight: 900;
+    color: rgba(255,255,255,.055);
+}
+
+.hero h2 { margin: 10px 0; font-size: 25px; position: relative; z-index: 1; }
+
+.hero p {
+    font-size: 13px;
+    color: #e7d9f7;
+    line-height: 1.8;
+    max-width: 520px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero .eyebrow { color: #ffb477; }
+
+.search-wrap {
+    display: flex;
+    max-width: 600px;
+    gap: 10px;
+    margin-top: 22px;
+    position: relative;
+    z-index: 1;
+}
+
+.search-wrap input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 16px;
+    border: 1px solid #e5d9f3;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+}
+
+.search-wrap input:focus { border-color: var(--orange); }
+
+.search-wrap button {
+    padding: 0 20px;
+    background: var(--orange);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 30px 0 16px;
+}
+
+.section-head h2 { font-size: 18px; margin: 0; }
+.section-head span { font-size: 12px; color: var(--muted); }
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 17px;
+    margin-top: 22px;
+}
+
+.stat {
+    background: white;
+    border: 1px solid #eeedf3;
+    padding: 21px;
+    border-radius: 12px;
+}
+
+.stat-icon {
+    display: grid;
+    place-items: center;
+    width: 39px;
+    height: 39px;
+    border-radius: 10px;
+    background: #f0e8fb;
+    font-size: 19px;
+}
+
+.stat h3 { font-size: 23px; margin: 17px 0 5px; }
+.stat p { font-size: 12px; color: var(--muted); margin: 0; }
+
+.pages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.page-card {
+    display: block;
+    text-decoration: none;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #eceaf2;
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+    color: var(--text);
+}
+
+.page-card:hover {
+    transform: translateY(-3px);
+    border-color: #c6afe4;
+    box-shadow: 0 8px 22px rgba(49, 24, 83, .07);
+}
+
+.card-top { display: flex; justify-content: space-between; align-items: center; }
+
+.card-icon {
+    width: 43px;
+    height: 43px;
+    border-radius: 11px;
+    display: grid;
+    place-items: center;
+    font-size: 21px;
+    background: #f2eafb;
+}
+
+.arrow { color: var(--orange); font-size: 21px; }
+
+.page-card h3 { font-size: 14px; margin: 17px 0 7px; }
+
+.page-card p {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.empty {
+    display: none;
+    padding: 30px;
+    text-align: center;
+    background: white;
+    border-radius: 12px;
+    color: var(--muted);
+}
+
+footer {
+    border-top: 1px solid #e9e7ef;
+    margin-top: 36px;
+    padding: 22px 32px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+footer strong { color: var(--purple); }
+
+@media(max-width: 1050px) {
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pages-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .sidebar { width: 205px; }
+}
+
+@media(max-width: 680px) {
+    .layout { display: block; }
+    .sidebar { width: 100%; padding: 16px; }
+    .brand-sub { padding-bottom: 8px; }
+    .sidebar nav { display: flex; overflow-x: auto; gap: 5px; }
+    .nav-label { display: none; }
+    .nav-link { white-space: nowrap; }
+    .topbar { padding: 15px 18px; }
+    .content { padding: 22px 16px; }
+    .hero { padding: 23px; }
+    .hero h2 { font-size: 22px; }
+    .stats, .pages-grid { grid-template-columns: 1fr; }
+    .search-wrap { flex-direction: column; }
+    .search-wrap button { padding: 13px; }
+    footer { padding: 20px 16px; }
+}
+
+/* Dark / Light theme toggle - added */
+.theme-toggle {
+    border: 1px solid #e9e7ef;
+    background: #ffffff;
+    color: #25233a;
+    padding: 9px 12px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 650;
+    white-space: nowrap;
+}
+
+.theme-toggle:hover { border-color: #ff6600; }
+
+body.dark-theme {
+    --bg: #11121a;
+    --text: #f0eff8;
+    --muted: #aaa9bd;
+    background: var(--bg);
+    color: var(--text);
+}
+
+body.dark-theme .sidebar,
+body.dark-theme .topbar,
+body.dark-theme .stat,
+body.dark-theme .page-card,
+body.dark-theme .empty {
+    background: #1b1c28;
+    color: #f0eff8;
+    border-color: #303141;
+}
+
+body.dark-theme .sidebar { border-right-color: #303141; }
+body.dark-theme .topbar { border-bottom-color: #303141; }
+
+body.dark-theme .nav-link { color: #d0cede; }
+
+body.dark-theme .nav-link:hover,
+body.dark-theme .nav-link.active {
+    background: #352447;
+    color: #e0c8ff;
+}
+
+body.dark-theme .brand span { color: #c8a4ff; }
+
+body.dark-theme .brand-sub,
+body.dark-theme .nav-label,
+body.dark-theme .subtitle,
+body.dark-theme .stat p,
+body.dark-theme .page-card p,
+body.dark-theme .topbar-right,
+body.dark-theme footer {
+    color: #aaa9bd;
+}
+
+body.dark-theme .stat-icon,
+body.dark-theme .card-icon { background: #30243f; }
+
+body.dark-theme .page-card:hover { border-color: #8765b0; }
+
+body.dark-theme footer { border-top-color: #303141; }
+
+body.dark-theme .theme-toggle {
+    background: #252638;
+    color: #f0eff8;
+    border-color: #45465a;
+}
+
+body.dark-theme .theme-toggle:hover { border-color: #ff6600; }
+
+body.dark-theme .search-wrap input {
+    background: #20212e;
+    color: #f0eff8;
+    border-color: #424052;
+}
+
+body.dark-theme .search-wrap input::placeholder { color: #aaa9bd; }
+</style>
+</head>
+
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+    <div class="brand"><span>Fed</span><b>Ex</b></div>
+    <div class="brand-sub">ADMINISTRATION PORTAL</div>
+
+    <nav>
+        <div class="nav-label">WORKSPACE</div>
+        <a class="nav-link active" href="global-search.html">🏠 Home</a>
+        <a class="nav-link" href="employees.html">👥 Employees</a>
+        <a class="nav-link" href="attendance.html">📅 Attendance</a>
+        <a class="nav-link" href="leave.html">🌴 Leave Management</a>
+        <a class="nav-link" href="employee-performance.html">📈 Performance</a>
+        <a class="nav-link" href="salary.html">💰 Salary & Payroll</a>
+
+        <div class="nav-label">OPERATIONS</div>
+        <a class="nav-link" href="holidays.html">🗓️ Holidays</a>
+        <a class="nav-link" href="reports.html">📊 Reports</a>
+        <a class="nav-link" href="notifications.html">🔔 Notifications</a>
+        <a class="nav-link" href="audit-log.html">📋 Audit Logs</a>
+
+        <div class="nav-label">SYSTEM</div>
+        <a class="nav-link" href="settings.html">⚙️ Settings</a>
+        <a class="nav-link" href="integration.html">🔗 Integrations</a>
+        <a class="nav-link" href="backup-restore.html">💾 Backup & Restore</a>
+        <a class="nav-link" href="TODOAPP.html">✅ Task Manager</a>
+        <a class="nav-link" href="login.html">🔐 Login Page</a>
+    </nav>
+</aside>
+
+<main class="main">
+    <header class="topbar">
+        <div class="topbar-title">FedEx Admin / Home</div>
+
+        <div class="topbar-right">
+            <span id="today"></span>
+
+            <button id="themeToggle" class="theme-toggle"
+                    type="button" aria-label="Switch to dark theme">
+                🌙 Dark
+            </button>
+
+            <div class="avatar">A</div>
+            <span>Administrator</span>
+        </div>
+    </header>
+
+    <div class="content">
+        <div class="eyebrow">FEDEX ADMINISTRATION</div>
+        <h1>Welcome to FedEx Portal 👋</h1>
+
+        <div class="subtitle">
+            Your central workspace to manage employees, attendance,
+            payroll, performance and daily operations.
+        </div>
+
+        <section class="hero">
+            <div class="eyebrow">YOUR WORKSPACE, ONE PLACE</div>
+            <h2>Everything you need to run your operations.</h2>
+
+            <p>
+                Access your administration tools, find the right page
+                quickly and navigate your FedEx employee management system.
+            </p>
+
+            <form class="search-wrap" id="searchForm">
+                <input id="pageSearch" type="search"
+                    placeholder="Search employees, attendance, reports..."
+                    aria-label="Search dashboard pages">
+                <button type="submit">Search Pages →</button>
+            </form>
+        </section>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-icon">👥</div>
+                <h3>Employees</h3>
+                <p>Employee directory & records</p>
+            </div>
+
+            <div class="stat">
+                <div class="stat-icon">📅</div>
+                <h3>Attendance</h3>
+                <p>Attendance management</p>
+            </div>
+
+            <div class="stat">
+                <div class="stat-icon">💰</div>
+                <h3>Payroll</h3>
+                <p>Salary & payroll records</p>
+            </div>
+
+            <div class="stat">
+                <div class="stat-icon">📊</div>
+                <h3>Reports</h3>
+                <p>Reports & performance</p>
+            </div>
+        </div>
+
+        <div class="section-head">
+            <h2>All Administration Pages</h2>
+            <span id="pageCount">15 pages</span>
+        </div>
+
+        <div class="pages-grid" id="pagesGrid">
+
+            <a class="page-card" href="employees.html" data-search="employees staff directory people">
+                <div class="card-top"><div class="card-icon">👥</div><span class="arrow">↗</span></div>
+                <h3>Employee Management</h3>
+                <p>Access employee records and directory.</p>
+            </a>
+
+            <a class="page-card" href="attendance.html" data-search="attendance time tracking present absent">
+                <div class="card-top"><div class="card-icon">📅</div><span class="arrow">↗</span></div>
+                <h3>Attendance Management</h3>
+                <p>View and manage attendance information.</p>
+            </a>
+
+            <a class="page-card" href="leave.html" data-search="leave vacation approval requests">
+                <div class="card-top"><div class="card-icon">🌴</div><span class="arrow">↗</span></div>
+                <h3>Leave Management</h3>
+                <p>Manage employee leave and requests.</p>
+            </a>
+
+            <a class="page-card" href="employee-performance.html" data-search="employee performance productivity evaluation">
+                <div class="card-top"><div class="card-icon">📈</div><span class="arrow">↗</span></div>
+                <h3>Employee Performance</h3>
+                <p>Review employee performance information.</p>
+            </a>
+
+            <a class="page-card" href="salary.html" data-search="salary payroll compensation">
+                <div class="card-top"><div class="card-icon">💰</div><span class="arrow">↗</span></div>
+                <h3>Salary & Payroll</h3>
+                <p>Access salary and payroll management.</p>
+            </a>
+
+            <a class="page-card" href="holidays.html" data-search="holidays calendar days off">
+                <div class="card-top"><div class="card-icon">🗓️</div><span class="arrow">↗</span></div>
+                <h3>Holiday Calendar</h3>
+                <p>View holidays and calendar information.</p>
+            </a>
+
+            <a class="page-card" href="reports.html" data-search="reports analytics summaries">
+                <div class="card-top"><div class="card-icon">📊</div><span class="arrow">↗</span></div>
+                <h3>Reports & Analytics</h3>
+                <p>Access available administration reports.</p>
+            </a>
+
+            <a class="page-card" href="notifications.html" data-search="notifications alerts messages">
+                <div class="card-top"><div class="card-icon">🔔</div><span class="arrow">↗</span></div>
+                <h3>Notifications</h3>
+                <p>View notifications and system updates.</p>
+            </a>
+
+            <a class="page-card" href="audit-log.html" data-search="audit logs history activity">
+                <div class="card-top"><div class="card-icon">📋</div><span class="arrow">↗</span></div>
+                <h3>Audit Logs</h3>
+                <p>Review recorded system activities.</p>
+            </a>
+
+            <a class="page-card" href="settings.html" data-search="settings preferences configuration">
+                <div class="card-top"><div class="card-icon">⚙️</div><span class="arrow">↗</span></div>
+                <h3>Settings</h3>
+                <p>Manage available portal settings.</p>
+            </a>
+
+            <a class="page-card" href="integration.html" data-search="integration connected systems">
+                <div class="card-top"><div class="card-icon">🔗</div><span class="arrow">↗</span></div>
+                <h3>Integrations</h3>
+                <p>Access integration management.</p>
+            </a>
+
+            <a class="page-card" href="backup-restore.html" data-search="backup restore recovery">
+                <div class="card-top"><div class="card-icon">💾</div><span class="arrow">↗</span></div>
+                <h3>Backup & Restore</h3>
+                <p>Access backup and recovery tools.</p>
+            </a>
+
+            <a class="page-card" href="forgot-password.html" data-search="forgot password recovery">
+                <div class="card-top"><div class="card-icon">🔑</div><span class="arrow">↗</span></div>
+                <h3>Forgot Password</h3>
+                <p>Open the password recovery page.</p>
+            </a>
+
+            <a class="page-card" href="reset-password.html" data-search="reset password security">
+                <div class="card-top"><div class="card-icon">🔐</div><span class="arrow">↗</span></div>
+                <h3>Reset Password</h3>
+                <p>Open the password reset interface.</p>
+            </a>
+
+            <a class="page-card" href="TODOAPP.html" data-search="tasks to do task manager">
+                <div class="card-top"><div class="card-icon">✅</div><span class="arrow">↗</span></div>
+                <h3>Task Manager</h3>
+                <p>Access your to-do management page.</p>
+            </a>
+
+            <a class="page-card" href="notifications.html" data-search="communication updates">
+                <div class="card-top"><div class="card-icon">📨</div><span class="arrow">↗</span></div>
+                <h3>Communication Center</h3>
+                <p>Open notifications and communications.</p>
+            </a>
+
+        </div>
+
+        <div class="empty" id="emptyState">
+            No matching pages found. Try another search.
+        </div>
+
+        <footer>
+            <span><strong>FedEx</strong> Administration Portal</span>
+            <span>Internal workspace · All rights reserved</span>
+        </footer>
+    </div>
+</main>
+</div>
+
+<script>
+document.getElementById("today").textContent =
+    new Intl.DateTimeFormat("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    }).format(new Date());
+
+const searchForm = document.getElementById("searchForm");
+const searchInput = document.getElementById("pageSearch");
+const cards = [...document.querySelectorAll(".page-card")];
+const pageCount = document.getElementById("pageCount");
+const emptyState = document.getElementById("emptyState");
+
+function filterPages() {
+    const query = searchInput.value.trim().toLowerCase();
+    let visible = 0;
+
+    cards.forEach(card => {
+        const searchable =
+            (card.innerText + " " + card.dataset.search + " " + card.href)
+            .toLowerCase();
+
+        const matches = searchable.includes(query);
+        card.style.display = matches ? "block" : "none";
+
+        if (matches) visible++;
+    });
+
+    pageCount.textContent = `${visible} pages`;
+    emptyState.style.display = visible ? "none" : "block";
+}
+
+searchInput.addEventListener("input", filterPages);
+
+searchForm.addEventListener("submit", event => {
+    event.preventDefault();
+    filterPages();
+
+    document.getElementById("pagesGrid").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+});
+
+/* Dark / Light theme toggle */
+const themeToggle = document.getElementById("themeToggle");
+const savedTheme = localStorage.getItem("fedex-theme");
+
+if (savedTheme === "dark") {
+    document.body.classList.add("dark-theme");
+}
+
+function updateThemeButton() {
+    const isDark = document.body.classList.contains("dark-theme");
+
+    themeToggle.textContent = isDark ? "☀️ Light" : "🌙 Dark";
+    themeToggle.setAttribute(
+        "aria-label",
+        isDark ? "Switch to light theme" : "Switch to dark theme"
+    );
+}
+
+updateThemeButton();
+
+themeToggle.addEventListener("click", () => {
+    const isDark = document.body.classList.toggle("dark-theme");
+
+    localStorage.setItem("fedex-theme", isDark ? "dark" : "light");
+    updateThemeButton();
+});
+</script>
+</body>
+</html>
